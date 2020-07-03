@@ -1,6 +1,7 @@
 """Models of Ask Your Rep app"""
 
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -15,8 +16,32 @@ class User(db.Model):
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String, nullable=False)
     email = db.Column(db.String)
-    home_district = db.relationship('District')
-    represenatives = 
+    home_districts = db.relationship('District', secondary='users_districts')
+    represenatives = db.relationship('Representative', secondary='users_representatives')
+
+class UserDistrict(db.Model):
+    """Mapping users to districts"""
+    __tablename__ = 'users_districts'
+
+    id = db.Column(db.Integer,
+                    primary_key=True,
+                    autoincrement=True)
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey(users.id))
+    district_id = db.Column(db.Integer,
+                            db.ForeignKey(districts.id))
+
+class UserRepresentative(db.Model):
+    """Mapping users to representatives"""
+    __tablename__ = 'users_representatives'
+
+    id = db.Column(db.Integer,
+                    primary_key=True,
+                    autoincrement=True)
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey(users.id))
+    representtive_id = db.Column(db.Integer,
+                                db.ForeignKey(representatives.id))
 
 class Representative(db.Model):
     """Representatives"""
@@ -27,10 +52,11 @@ class Representative(db.Model):
                     autoincrement=True)
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String, nullable=False)
-    district = db.relationship('District')
+    district = db.relationship('District', backref='representatives')
     photo_url = db.Column(db.String)
     email = db.Column(db.String)
-    serving = db.Column(db.Boolean)
+    house = db.Column(db.String, nullable=False)
+    serving = db.Column(db.Boolean, nullable=False)
 
 class District(db.Model):
     """Districts"""
@@ -41,6 +67,7 @@ class District(db.Model):
                     autoincrement=True)
     state = db.Column(db.String, nullable=False)
     district_num = db.Column(db.Integer, nullable=False)
+    house = db.Column(db.String, nullable=False)
 
 class Office(db.Model):
     """Representatives's offices"""
@@ -49,7 +76,7 @@ class Office(db.Model):
     id = db.Column(db.Integer, 
                     primary_key=True,
                     autoincrement=True)
-    representative
+    representative = db.Relationship('Representative', backref='offices')
     phone = db.Column(db.String)
     address = db.Column(db.String)
     location = db.Column(db.String)
@@ -61,8 +88,8 @@ class Interaction(db.Model):
     id = db.Column(db.Integer, 
                     primary_key=True,
                     autoincrement=True)
-    user = db.relationship('User')
-    representative = db.relationship('Representative')
+    user = db.Relationship('User', backref='interactions')
+    representative = db.Relationship('Representative', backref='interactions')
     entry_date = db.Column(db.DateTime,
                             nullable=False,
                             default=datetime.utcnow())
