@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, redirect
 from flask_debugtoolbar import DebugToolbarExtension
 
 from models import db, connect_db
@@ -17,43 +17,47 @@ debug = DebugToolbarExtension(app)
 
 @app.route("/")
 def home():
+    """rendering the front page of the app"""
 
-    return
+    """do something to see if user is logged in"""
+
+    return render_template('index.html')
 
 @app.route("/your-reps")
 def your_reps():
 
-    return
+    return render_template('reps.html')
 
 @app.route("/user")
 def user_home():
 
-    return
+    return render_template('user.html')
 
-@app.route("/user/redistrict")
-def redistrict():
+""""Possibly unneeded"""
+# @app.route("/user/redistrict")
+# def redistrict():
 
-    return
+#     return
 
 @app.route("/user/edit")
 def edit_user():
 
-    return
+    return render_template('edit-user.html')
 
 @app.route("/login")
 def login():
 
-    return
+    return render_template('login.html')
 
 @app.route("/signup")
 def signup():
 
-    return
+    return render_template('signup.html')
 
 @app.route("/user/interactions")
 def interactions():
 
-    return
+    return render_template('interactions.html')
 
 @app.route("/user/interactions/add")
 def add_interaction():

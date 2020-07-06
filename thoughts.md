@@ -1,6 +1,10 @@
 # TODOS
 
     - base.html
+        - depencies to add?
+        - bootstrap
+    - home.html
+        - find lat long script
     - comments
     - test database
     - test apis working
@@ -21,9 +25,13 @@
     - what style should I use?
     - where to put navigation
     - how can I use bill information
+
+        - scroll with info? 
+
     - news search for name / display as sidebar or ?
     - Flask blueprints
     - mobility?
+    - what to with rep ids?
 
 # REMEMBER
 
