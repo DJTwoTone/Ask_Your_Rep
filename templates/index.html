@@ -2,6 +2,30 @@
 
 {% block title %} Ask Your Rep {% endblock %}
 
+{% block head_addons%}
+<script src="https://api.mqcdn.com/sdk/place-search-js/v1.0.0/place-search.js"></script>
+<link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/place-search-js/v1.0.0/place-search.css"/>
+
+{% endblock %}
+
 {% block content %}
+
+<input type="search" id="search-input" placeholder="Where do you live?" />
+
+<script type="text/javascript">
+    window.onload = function() {
+      placeSearch({
+        key: 'lYrP4vF3Uk5zgTiGGuEzQGwGIVDGuy24',
+        container: document.querySelector('#search-input'),
+        useDeviceLocation: true,
+        collection: [
+          'poi',
+          'airport',
+          'address',
+          'adminArea',
+        ]
+      });
+    }
+  </script>
 
 {% endblock %}

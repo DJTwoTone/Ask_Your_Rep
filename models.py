@@ -5,6 +5,10 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
+def connect_db(app):
+    db.app = app
+    db.init_app(app)
+
 class User(db.Model):
     """Users"""
     __tablename__ = 'users'
@@ -27,9 +31,9 @@ class UserDistrict(db.Model):
                     primary_key=True,
                     autoincrement=True)
     user_id = db.Column(db.Integer,
-                        db.ForeignKey(users.id))
+                        db.ForeignKey('users.id'))
     district_id = db.Column(db.Integer,
-                            db.ForeignKey(districts.id))
+                            db.ForeignKey('districts.id'))
 
 class UserRepresentative(db.Model):
     """Mapping users to representatives"""
@@ -39,9 +43,9 @@ class UserRepresentative(db.Model):
                     primary_key=True,
                     autoincrement=True)
     user_id = db.Column(db.Integer,
-                        db.ForeignKey(users.id))
+                        db.ForeignKey('users.id'))
     representtive_id = db.Column(db.Integer,
-                                db.ForeignKey(representatives.id))
+                                db.ForeignKey('representatives.id'))
 
 class Representative(db.Model):
     """Representatives"""
@@ -76,7 +80,7 @@ class Office(db.Model):
     id = db.Column(db.Integer, 
                     primary_key=True,
                     autoincrement=True)
-    representative = db.Relationship('Representative', backref='offices')
+    representative = db.relationship('Representative', backref='offices')
     phone = db.Column(db.String)
     address = db.Column(db.String)
     location = db.Column(db.String)
@@ -88,8 +92,8 @@ class Interaction(db.Model):
     id = db.Column(db.Integer, 
                     primary_key=True,
                     autoincrement=True)
-    user = db.Relationship('User', backref='interactions')
-    representative = db.Relationship('Representative', backref='interactions')
+    user = db.relationship('User', backref='interactions')
+    representative = db.relationship('Representative', backref='interactions')
     entry_date = db.Column(db.DateTime,
                             nullable=False,
                             default=datetime.utcnow())
