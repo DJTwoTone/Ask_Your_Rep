@@ -1,5 +1,6 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
 from flask_debugtoolbar import DebugToolbarExtension
+import requests
 
 from models import db, connect_db
 
@@ -9,9 +10,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
 connect_db(app)
-db.create_all()
+# db.create_all()
 
 app.config['SECRET_KEY'] = "Give me liberty, or give me death"
+mapQKey = 'n2BFbDxJHnrRNG5um6e81nYoGcHGbBm7'
+openStatesKey = '0c190e42-7c55-4ea7-98f4-0d9935580b33'
 
 debug = DebugToolbarExtension(app)
 
@@ -25,8 +28,26 @@ def home():
 
 @app.route("/your-reps")
 def your_reps():
+    place = request.args['search-input']
+    geodata = requests.get('http://www.mapquestapi.com/geocoding/v1/address', 
+                            params={
+                                'key': mapQKey,
+                                'location': place
+                                    })
 
-    return render_template('reps.html')
+    jdata = geodata.json()
+    latLng = jdata['results'][0]['locations'][0]['latLng']
+    lat = latLng['lat']
+    lng = latLng['lng']
+
+    repsResp = requests.get('http://www.openstates.org/api/v1/legislators/geo',
+                        params={
+                            'apikey': openStatesKey,
+                            'lat': lat,
+                            'long': lng
+                        })
+    reps = repsResp.json()
+    return render_template('reps.html', reps=reps)
 
 @app.route("/user")
 def user_home():

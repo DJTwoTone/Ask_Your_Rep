@@ -3,29 +3,18 @@
 {% block title %} Ask Your Rep {% endblock %}
 
 {% block head_addons%}
-<script src="https://api.mqcdn.com/sdk/place-search-js/v1.0.0/place-search.js"></script>
-<link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/place-search-js/v1.0.0/place-search.css"/>
-
 {% endblock %}
 
 {% block content %}
 
-<input type="search" id="search-input" placeholder="Where do you live?" />
+<form id="geoform" action="/your-reps">
+  <input type="search" id="search-input"  name="search-input" placeholder="What's your address?" />
+  <button type="submit">Find Your Reps</button>
+</form>
 
-<script type="text/javascript">
-    window.onload = function() {
-      placeSearch({
-        key: 'lYrP4vF3Uk5zgTiGGuEzQGwGIVDGuy24',
-        container: document.querySelector('#search-input'),
-        useDeviceLocation: true,
-        collection: [
-          'poi',
-          'airport',
-          'address',
-          'adminArea',
-        ]
-      });
-    }
-  </script>
 
+
+<script src="https://api.mqcdn.com/sdk/place-search-js/v1.0.0/place-search.js"></script>
+<link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/place-search-js/v1.0.0/place-search.css"/>
+<script src="static/instaplace-search.js"></script>
 {% endblock %}

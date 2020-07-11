@@ -3,5 +3,30 @@
 {% block title %} Ask Your Rep {% endblock %}
 
 {% block content %}
+<div class="container">
+    <div class="row">
+
+        {% for rep in reps %}
+        <div class="card">
+            <img src="{{rep.photo_url}}" class="card-img-top" alt="{{rep.full_name}}">
+            <div class="card-body">
+              <h5 class="card-title">{{rep.full_name}}</h5>
+              <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+            </div>
+            <!-- <ul class="list-group list-group-flush">
+              <li class="list-group-item">Cras justo odio</li>
+              <li class="list-group-item">Dapibus ac facilisis in</li>
+              <li class="list-group-item">Vestibulum at eros</li>
+            </ul> -->
+          </div>
+        
+        
+        <!-- {{rep.full_name}}
+        {{rep.party}}
+        {{rep.chamber}} -->
+        {% endfor %}
+    </div>
+</div>
+
 
 {% endblock %}

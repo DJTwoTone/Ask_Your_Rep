@@ -1,0 +1,3 @@
+$locationForm = $('')
+$searchInput = $('#search-input')
+
