@@ -1,8 +1,9 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, g
 from flask_debugtoolbar import DebugToolbarExtension
 import requests
 
-from models import db, connect_db
+from models import db, connect_db, User
+from forms import RegistrationForm, LoginForm
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///ask_your_rep_app'
@@ -10,7 +11,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
 connect_db(app)
-# db.create_all()
+db.create_all()
 
 app.config['SECRET_KEY'] = "Give me liberty, or give me death"
 mapQKey = 'n2BFbDxJHnrRNG5um6e81nYoGcHGbBm7'
@@ -47,7 +48,7 @@ def your_reps():
                             'long': lng
                         })
     reps = repsResp.json()
-    return render_template('reps.html', reps=reps)
+    return render_template('reps.html', reps=reps, place=place)
 
 @app.route("/user")
 def user_home():
@@ -65,15 +66,50 @@ def edit_user():
 
     return render_template('edit-user.html')
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
 
-    return render_template('login.html')
+    form = LoginForm()
 
-@app.route("/signup")
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+
+        user = User.authenticate(username, password)
+
+        if user:
+            session["user_id"] = user.id
+            return redirect("/user")
+        else:
+            #refactor this to both
+            form.username.errors = ["There's a problem with your username or password."]
+
+    return render_template('login.html', form=form)
+
+@app.route("/signup", methods=["GET", "POST"])
 def signup():
 
-    return render_template('signup.html')
+    form = RegistrationForm()
+
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        email = form.email.data
+        first_name = form.first_name.data
+        last_name = form.last_name.data
+        address = form.address.data
+
+        user = User.register(username, password, email,
+                            first_name, last_name, address)
+        
+        db.session.add(user)
+        db.session.commit()
+
+        session["user_id"] = user.id
+
+        return redirect("/user")
+
+    return render_template('signup.html', form=form)
 
 @app.route("/user/interactions")
 def interactions():
