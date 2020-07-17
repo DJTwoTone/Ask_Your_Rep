@@ -71,6 +71,8 @@ class UserDistrict(db.Model):
     district_id = db.Column(db.Integer,
                             db.ForeignKey('districts.id'))
 
+    
+
 class UserRepresentative(db.Model):
     """Mapping users to representatives"""
     __tablename__ = 'users_representatives'
@@ -92,11 +94,21 @@ class Representative(db.Model):
                     autoincrement=True)
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String, nullable=False)
+    full_name = db.Column(db.String, nullable=False)
     district = db.relationship('District', backref='representatives')
     photo_url = db.Column(db.String)
     email = db.Column(db.String)
     house = db.Column(db.String, nullable=False)
     serving = db.Column(db.Boolean, nullable=False)
+
+    @classmethod
+    def check_rep(cls, full_name, state, district_num, house, serving):
+
+        rep = cls.query.filter(cls.full_name == full_name, 
+                                    cls.district.state == state,
+                                    cls.district.district_num == district_num,
+                                    cls.district.house == house,
+                                    serving=serving).one()
 
 class District(db.Model):
     """Districts"""
@@ -108,6 +120,13 @@ class District(db.Model):
     state = db.Column(db.String, nullable=False)
     district_num = db.Column(db.Integer, nullable=False)
     house = db.Column(db.String, nullable=False)
+
+    @classmethod
+    def check_district(cls, state, district_num, house):
+
+        dist = cls.query.filter_by(state=state, district_num=district_num, house=house).one()
+
+        return dist
 
 class Office(db.Model):
     """Representatives's offices"""

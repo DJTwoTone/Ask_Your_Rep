@@ -5,23 +5,34 @@
 {% block content %}
 
 <h1>Showing representatives for:</h1>
-<p>{{place}}</p>
+<p>{{address}}</p>
 
 <div class="container">
-    <div class="row">
+    <div class="row d-flex justify-content-around">
 
         {% for rep in reps %}
-        <div class="card">
-            <img src="{{rep.photo_url}}" class="card-img-top" alt="{{rep.full_name}}">
+        <div class="card p-3" style="width: 20rem;">
+            <img src="{{rep.photo_url}}" class="card-img-top rounded-circle" alt="{{rep.full_name}}">
             <div class="card-body">
               <h5 class="card-title">{{rep.full_name}}</h5>
-              <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
             </div>
-            <!-- <ul class="list-group list-group-flush">
-              <li class="list-group-item">Cras justo odio</li>
-              <li class="list-group-item">Dapibus ac facilisis in</li>
-              <li class="list-group-item">Vestibulum at eros</li>
-            </ul> -->
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">{{rep.party}}</li>
+              <li class="list-group-item">{{rep.chamber |capitalize}}</li>
+              <li class="list-group-item">{{rep.district}}</li>
+              <li class="list-group-item">{{rep.state |upper}}</li>
+              <li class="list-group-item">{{rep.email}}</li>
+              <li class="list-group-item">{{rep.sources[0].url}}</li>
+            </ul>
+            <div>
+              {% for office in rep.offices %}
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">{{office.name}}</li>
+                <li class="list-group-item">{{office.phone}}</li>
+                <li class="list-group-item">{{office.address}}</li>
+
+              {% endfor %}
+            </div>
           </div>
         
         

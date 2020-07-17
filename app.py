@@ -11,7 +11,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
 connect_db(app)
-db.create_all()
+# db.create_all()
 
 app.config['SECRET_KEY'] = "Give me liberty, or give me death"
 mapQKey = 'n2BFbDxJHnrRNG5um6e81nYoGcHGbBm7'
@@ -29,11 +29,11 @@ def home():
 
 @app.route("/your-reps")
 def your_reps():
-    place = request.args['search-input']
+    address = request.args['search-input']
     geodata = requests.get('http://www.mapquestapi.com/geocoding/v1/address', 
                             params={
                                 'key': mapQKey,
-                                'location': place
+                                'location': address
                                     })
 
     jdata = geodata.json()
@@ -48,7 +48,7 @@ def your_reps():
                             'long': lng
                         })
     reps = repsResp.json()
-    return render_template('reps.html', reps=reps, place=place)
+    return render_template('reps.html', reps=reps, address=address)
 
 @app.route("/user")
 def user_home():
