@@ -3,10 +3,14 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from datetime import datetime
+import requests
 
 db = SQLAlchemy()
-
 bcrypt = Bcrypt()
+
+mapQKey = 'n2BFbDxJHnrRNG5um6e81nYoGcHGbBm7'
+openStatesKey = '0c190e42-7c55-4ea7-98f4-0d9935580b33'
+
 
 def connect_db(app):
     db.app = app
@@ -96,9 +100,9 @@ class Representative(db.Model):
     last_name = db.Column(db.String, nullable=False)
     full_name = db.Column(db.String, nullable=False)
     district = db.relationship('District', backref='representatives')
+    house = db.Column(db.String, nullable=False)
     photo_url = db.Column(db.String)
     email = db.Column(db.String)
-    house = db.Column(db.String, nullable=False)
     serving = db.Column(db.Boolean, nullable=False)
 
     @classmethod
@@ -109,6 +113,28 @@ class Representative(db.Model):
                                     cls.district.district_num == district_num,
                                     cls.district.house == house,
                                     serving=serving).one()
+
+    
+    def find_reps(address):
+        geodata = requests.get('http://www.mapquestapi.com/geocoding/v1/address', 
+                            params={
+                                'key': mapQKey,
+                                'location': address
+                                    })
+
+        jdata = geodata.json()
+        latLng = jdata['results'][0]['locations'][0]['latLng']
+        lat = latLng['lat']
+        lng = latLng['lng']
+
+        repsResp = requests.get('http://www.openstates.org/api/v1/legislators/geo',
+                        params={
+                            'apikey': openStatesKey,
+                            'lat': lat,
+                            'long': lng
+                        })
+        return repsResp.json()
+
 
 class District(db.Model):
     """Districts"""

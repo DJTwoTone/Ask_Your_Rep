@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, request, g
 from flask_debugtoolbar import DebugToolbarExtension
 import requests
 
-from models import db, connect_db, User
+from models import db, connect_db, User, Representative
 from forms import RegistrationForm, LoginForm
 
 app = Flask(__name__)
@@ -14,8 +14,8 @@ connect_db(app)
 # db.create_all()
 
 app.config['SECRET_KEY'] = "Give me liberty, or give me death"
-mapQKey = 'n2BFbDxJHnrRNG5um6e81nYoGcHGbBm7'
-openStatesKey = '0c190e42-7c55-4ea7-98f4-0d9935580b33'
+# mapQKey = 'n2BFbDxJHnrRNG5um6e81nYoGcHGbBm7'
+# openStatesKey = '0c190e42-7c55-4ea7-98f4-0d9935580b33'
 
 debug = DebugToolbarExtension(app)
 
@@ -30,24 +30,8 @@ def home():
 @app.route("/your-reps")
 def your_reps():
     address = request.args['search-input']
-    geodata = requests.get('http://www.mapquestapi.com/geocoding/v1/address', 
-                            params={
-                                'key': mapQKey,
-                                'location': address
-                                    })
 
-    jdata = geodata.json()
-    latLng = jdata['results'][0]['locations'][0]['latLng']
-    lat = latLng['lat']
-    lng = latLng['lng']
-
-    repsResp = requests.get('http://www.openstates.org/api/v1/legislators/geo',
-                        params={
-                            'apikey': openStatesKey,
-                            'lat': lat,
-                            'long': lng
-                        })
-    reps = repsResp.json()
+    reps = Representative.find_reps(address)
     return render_template('reps.html', reps=reps, address=address)
 
 @app.route("/user")
@@ -89,7 +73,9 @@ def login():
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
 
+    address = request.args['address']
     form = RegistrationForm()
+    form.address.data = address
 
     if form.validate_on_submit():
         username = form.username.data
@@ -99,8 +85,16 @@ def signup():
         last_name = form.last_name.data
         address = form.address.data
 
+
+        #get reps, loop through reps, check for existance 
+        # - loop through offices, create offices 
+        # - check for districts, create districts
+        # - create rep, add office, add district
+
         user = User.register(username, password, email,
                             first_name, last_name, address)
+
+        #add rep, add district
         
         db.session.add(user)
         db.session.commit()
@@ -109,7 +103,7 @@ def signup():
 
         return redirect("/user")
 
-    return render_template('signup.html', form=form)
+    return render_template('signup.html', form=form, address=address)
 
 @app.route("/user/interactions")
 def interactions():
@@ -130,3 +124,4 @@ def edit_interaction():
 def del_interaction():
 
     return
+    
