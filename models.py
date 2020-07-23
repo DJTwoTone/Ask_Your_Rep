@@ -35,6 +35,7 @@ class User(db.Model):
                                     secondary='users_districts')
     represenatives = db.relationship('Representative',
                                     secondary='users_representatives')
+    interactions = db.relationship('Interaction')
 
     @classmethod
     def register(cls, username, password, first_name,
@@ -48,6 +49,8 @@ class User(db.Model):
         return cls(username=username, password=hashed_utf8, first_name=first_name,
                     last_name=last_name, email=email,
                     address=address)
+
+                    #need to add dosrict here
 
     @classmethod
     def authenticate(cls, username, password):
@@ -75,6 +78,18 @@ class UserDistrict(db.Model):
     district_id = db.Column(db.Integer,
                             db.ForeignKey('districts.id'))
 
+class RepresentativeDistrict(db.Model):
+    """Mapping representatives to districts"""
+    __tablename__ = "representatives_districts"
+
+    id = db.Column(db.Integer,
+                    primary_key=True,
+                    autoincrement=True)
+    rep_id = db.Column(db.Integer,
+                        db.ForeignKey('representatives.id'))
+    district_id = db.Column(db.Integer,
+                        db.ForeignKey('districts.id'))
+
     
 
 class UserRepresentative(db.Model):
@@ -99,11 +114,15 @@ class Representative(db.Model):
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String, nullable=False)
     full_name = db.Column(db.String, nullable=False)
-    district = db.relationship('District', backref='representatives')
+    district = db.relationship('District', 
+                                secondary='representatives_districts',
+                                backref='representatives')
     house = db.Column(db.String, nullable=False)
+    offices = db.relationship('Office', backref='representative')
     photo_url = db.Column(db.String)
     email = db.Column(db.String)
     serving = db.Column(db.Boolean, nullable=False)
+    # interactions = db.relationship('Interaction')
 
     @classmethod
     def check_rep(cls, full_name, state, district_num, house, serving):
@@ -113,6 +132,8 @@ class Representative(db.Model):
                                     cls.district.district_num == district_num,
                                     cls.district.house == house,
                                     serving=serving).one()
+
+        return rep
 
     
     def find_reps(address):
@@ -161,7 +182,8 @@ class Office(db.Model):
     id = db.Column(db.Integer, 
                     primary_key=True,
                     autoincrement=True)
-    representative = db.relationship('Representative', backref='offices')
+    # representative = db.Column(db.Integer, db.ForeignKey('representatives.id'))
+    representative_id = db.Column(db.Integer, db.ForeignKey('representatives.id'))
     phone = db.Column(db.String)
     address = db.Column(db.String)
     location = db.Column(db.String)
@@ -173,12 +195,12 @@ class Interaction(db.Model):
     id = db.Column(db.Integer, 
                     primary_key=True,
                     autoincrement=True)
-    user = db.relationship('User', backref='interactions')
-    representative = db.relationship('Representative', backref='interactions')
-    entry_date = db.Column(db.DateTime,
+    user = db.Column(db.Integer, db.ForeignKey('users.id'))
+    representative = db.Column(db.Integer, db.ForeignKey('representatives.id'))
+    entered_date = db.Column(db.DateTime,
                             nullable=False,
                             default=datetime.utcnow())
-    entered_date = db.Column(db.DateTime, nullable=False)
+    interaction_date = db.Column(db.DateTime, nullable=False)
     medium = db.Column(db.String, nullable=False)
     topic = db.Column(db.String, nullable=False)
     content = db.Column(db.String, nullable=False)

@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, request, g
 from flask_debugtoolbar import DebugToolbarExtension
 import requests
 
-from models import db, connect_db, User, Representative
+from models import db, connect_db, User, Representative, District
 from forms import RegistrationForm, LoginForm
 
 app = Flask(__name__)
@@ -11,7 +11,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
 connect_db(app)
-# db.create_all()
+db.create_all()
 
 app.config['SECRET_KEY'] = "Give me liberty, or give me death"
 # mapQKey = 'n2BFbDxJHnrRNG5um6e81nYoGcHGbBm7'
@@ -76,6 +76,8 @@ def signup():
     address = request.args['address']
     form = RegistrationForm()
     form.address.data = address
+    form.address.id = "search-input"
+    form.address.type = "search"
 
     if form.validate_on_submit():
         username = form.username.data
@@ -86,22 +88,70 @@ def signup():
         address = form.address.data
 
 
+        reps = Representative.find_reps(address)
+
+        for rep in reps:
+            full_name = rep.get('full_name')
+            state = rep.get('state')
+            district_num = rep.get('district_num')
+            house = rep.get('house')
+            serving = rep.get('serving')
+
+            if not Representative.check_rep(full_name, state, district_num, house, serving):
+                state = rep.get('state')
+                district_num = rep.get('district'),
+                house = rep.get('chamber')
+                
+                if not District.check_district(
+                                                state=state,
+                                                district_num=district_num,
+                                                house=house
+                                                ):
+                    dist = District(state=state, district_num=district_num, house=house)
+                    session.add(dist)
+                    session.commit()
+                else:
+                    dist = District.check_district(
+                                                state=state,
+                                                district_num=district_num,
+                                                house=house
+                                                )
+                r = Representative(
+                                    first_name=rep.get('first_name'),
+                                    last_name=rep.get('last_name'),
+                                    full_name=rep.get('full_name'),
+                                    district=dist,
+                                    photo_url=rep.get('photo_url'),
+                                    email=rep.get('email'),
+                                    serving=rep.get('serving'),
+                                    )
+
+                import pdb
+                pdb.set_trace()
+
+                
+
+
+
+
         #get reps, loop through reps, check for existance 
         # - loop through offices, create offices 
         # - check for districts, create districts
         # - create rep, add office, add district
 
-        user = User.register(username, password, email,
-                            first_name, last_name, address)
+        # user = User.register(username, password, email,
+        #                     first_name, last_name, address)
 
         #add rep, add district
         
-        db.session.add(user)
-        db.session.commit()
+        # db.session.add(user)
+        # db.session.commit()
 
-        session["user_id"] = user.id
-
-        return redirect("/user")
+        # session["user_id"] = user.id
+        # import pdb
+        # pdb.set_trace()
+        return reps
+        # return redirect("/user")
 
     return render_template('signup.html', form=form, address=address)
 
