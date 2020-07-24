@@ -4,10 +4,9 @@
       container: document.querySelector('#search-input'),
       useDeviceLocation: true,
       collection: [
-        'poi',
-        'address',
-        'adminArea',
-      ]
+        'address'
+        ],
+        countryCode: 'US'
     });
   }
 

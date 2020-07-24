@@ -33,10 +33,15 @@ db.session.commit()
 user = User.query.get(1)
 rep = Representative.query.get(1)
 
-user.
+user.representatives.append(rep)
+user.home_districts.append(district)
 rep.offices.append(office)
+rep.district.append(district)
+
 db.session.commit()
 
+# import pdb
+# pdb.set_trace()
 
 test_interaction = Interaction(user=user, representative=rep ,entered_date='2020-07-15 10:00:00', medium='email', topic='stuff and junk', content='all the things')
 db.session.add(test_interaction)
