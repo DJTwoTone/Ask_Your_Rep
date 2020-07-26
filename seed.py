@@ -14,7 +14,7 @@ UserRepresentative.query.delete()
 RepresentativeDistrict.query.delete()
 
 test_office = Office(phone='123-555-1234', address='123 Test St.', location='district')
-test_district = District(state='NY', district_num=123, house='lower')
+test_district = District(state='ny', district_num=123, house='lower')
 
 db.session.add(test_office)
 db.session.add(test_district)

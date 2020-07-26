@@ -109,8 +109,8 @@ def signup():
             district_num = rep.get('district_num')
             house = rep.get('house')
 
-            if not Representative.check_rep(full_name, serving):
-            # if not Representative.check_rep(full_name, state, district_num, house, serving):
+            # if not Representative.check_rep(full_name, serving):
+            if not Representative.check_rep(full_name, state, district_num, house, serving):
                 
                 r = Representative(first_name=first_name,
                                     last_name=last_name,
@@ -141,8 +141,8 @@ def signup():
 
             else:
 
-                r = Representative.check_rep(full_name, serving)
-                # r = Representative.check_rep(full_name, state, district_num, house, serving)
+                # r = Representative.check_rep(full_name, serving)
+                r = Representative.check_rep(full_name, state, district_num, house, serving)
                 
             user.representatives.append(r)
             db.session.commit()

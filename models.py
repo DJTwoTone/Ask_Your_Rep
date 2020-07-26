@@ -31,6 +31,7 @@ class District(db.Model):
     @classmethod
     def check_district(cls, state, district_num, house):
 
+        
         dist = cls.query.filter(cls.state == state,
                                  cls.district_num == district_num,
                                  cls.house == house).one()
@@ -87,13 +88,15 @@ class Representative(db.Model):
     interactions = db.relationship("Interaction", backref='representatiive')
 
     @classmethod
-    def check_rep(cls, full_name, serving):
-    # def check_rep(cls, full_name, state, district_num, house, serving):
+    # def check_rep(cls, full_name, serving):
+    def check_rep(cls, full_name, state, district_num, house, serving):
+        import pdb
+        pdb.set_trace()
 
         rep = cls.query.filter(cls.full_name == full_name, 
-                                    # cls.district[0].state == state,
-                                    # cls.district[0].district_num == district_num,
-                                    # cls.district[0].house == house,
+                                    cls.district[0].state == state,
+                                    cls.district[0].district_num == district_num,
+                                    cls.district[0].house == house,
                                     cls.serving == serving).one_or_none()
         print(rep)
         return rep

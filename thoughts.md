@@ -1,15 +1,17 @@
 # TODOS
 
-    - base.html
+
+    
+    - ~~base.html~~
         - depencies to add?
-        - bootstrap
-    - home.html
-        - find lat long script
+        - ~~bootstrap~~
+    - ~~home.html~~
+        - ~~find lat long script~~
     - comments
-    - test database
-    - test apis working
+    - ~~test database~~
+    - ~~test apis working~~
     - inital tests
-    - other basic views/routes
+    - ~~other basic views/routes~~
     - test the views/routes
     - pretty things up
 
