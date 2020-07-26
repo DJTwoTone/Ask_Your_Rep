@@ -79,6 +79,9 @@ def signup():
     form.address.id = "search-input"
     form.address.type = "search"
 
+    # import pdb
+    # pdb.set_trace()
+
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
@@ -101,12 +104,13 @@ def signup():
             full_name=rep.get('full_name'),
             photo_url=rep.get('photo_url'),
             email=rep.get('email'),
-            serving=rep.get('serving')
+            serving=rep.get('active')
             state = rep.get('state')
             district_num = rep.get('district_num')
             house = rep.get('house')
 
-            if not Representative.check_rep(full_name, state, district_num, house, serving):
+            if not Representative.check_rep(full_name, serving):
+            # if not Representative.check_rep(full_name, state, district_num, house, serving):
                 
                 r = Representative(first_name=first_name,
                                     last_name=last_name,
@@ -120,27 +124,28 @@ def signup():
 
                 if not District.check_district(state=state, district_num=district_num, house=house):
                     dist = District(state=state, district_num=district_num, house=house)
-                    session.add(dist)
-                    session.commit()
+                    db.session.add(dist)
+                    db.session.commit()
 
                 else:
                     dist = District.check_district(state=state, district_num=district_num, house=house)
                 
                 r.district.append(dist)
-                session.commit()
+                db.session.commit()
 
                 for office in rep.offices:
                     o = Office(phone=office.phone, address=office.address, location=office.name)
 
                     r.offices.append(o)
-                    session.commit()
+                    db.session.commit()
 
             else:
 
-                r = Representative.check_rep(full_name, state, district_num, house, serving)
+                r = Representative.check_rep(full_name, serving)
+                # r = Representative.check_rep(full_name, state, district_num, house, serving)
                 
             user.representatives.append(r)
-            session.commit()
+            db.session.commit()
                 
                 
                 
