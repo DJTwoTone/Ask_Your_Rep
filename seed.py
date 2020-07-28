@@ -1,4 +1,4 @@
-from models import db, User, District, UserDistrict, UserRepresentative, Representative, RepresentativeDistrict, Office, Interaction
+from models import db, User, District, UserRepresentative, Representative, Office, Interaction#, RepresentativeDistrict, UserDistrict
 from app import app
 
 db.drop_all()
@@ -9,9 +9,9 @@ District.query.delete()
 Representative.query.delete()
 User.query.delete()
 Interaction.query.delete()
-UserDistrict.query.delete()
+# UserDistrict.query.delete()
 UserRepresentative.query.delete()
-RepresentativeDistrict.query.delete()
+# RepresentativeDistrict.query.delete()
 
 test_office = Office(phone='123-555-1234', address='123 Test St.', location='district')
 test_district = District(state='ny', district_num=123, house='lower')
@@ -34,7 +34,7 @@ user = User.query.get(1)
 rep = Representative.query.get(1)
 
 user.representatives.append(rep)
-user.home_districts.append(district)
+user.home_district_id.append(district)
 rep.offices.append(office)
 rep.district.append(district)
 
@@ -43,7 +43,7 @@ db.session.commit()
 # import pdb
 # pdb.set_trace()
 
-test_interaction = Interaction(user_id=user.id, representative_id=rep.id, interaction_date='2020-07-15 10:00:00', medium='email', topic='stuff and junk', content='all the things')
+test_interaction = Interaction(user_id=user.id, representative_id=rep.id, home_dist_id=district.id, interaction_date='2020-07-15 10:00:00', medium='email', topic='stuff and junk', content='all the things')
 db.session.add(test_interaction)
 
 db.session.commit()

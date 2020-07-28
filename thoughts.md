@@ -1,6 +1,6 @@
 # TODOS
 
-
+    - refactor disticts to one to many
     
     - ~~base.html~~
         - depencies to add?
