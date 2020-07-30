@@ -27,12 +27,6 @@ class District(db.Model):
     state = db.Column(db.String, nullable=False)
     district_num = db.Column(db.Integer, nullable=False)
     house = db.Column(db.String, nullable=False)
-    # representative_ids = db.Column(db.Integer, db.ForeignKey('representative.id'))
-    representatives = db.relationship('Representative', backref='district')
-    users = db.relationship('User', backref='district')
-    interactions = db.relationship("Interaction", 
-                                    secondary='ints_users_reps_dists',
-                                    backref="district")
 
     @classmethod
     def check_district(cls, state, district_num, house):
@@ -68,25 +62,22 @@ class Representative(db.Model):
     last_name = db.Column(db.String, nullable=False)
     full_name = db.Column(db.String, nullable=False)
     district_id = db.Column(db.Integer, db.ForeignKey('districts.id'))
+    district = db.relationship("District", backref='repersentatives')
     offices = db.relationship('Office',
                                 backref='representative', cascade="all,delete")
     photo_url = db.Column(db.String)
     email = db.Column(db.String)
     serving = db.Column(db.Boolean, nullable=False)
-    # interactions = db.relationship("Interaction", backref='representative')
-    interactions = db.relationship("Interaction", 
-                                    secondary='ints_users_reps_dists',
-                                    backref="representative")
+
     @classmethod
-    # def check_rep(cls, full_name, serving):
     def check_rep(cls, full_name, state, district_num, house, serving):
         import pdb
         pdb.set_trace()
 
         rep = cls.query.filter(cls.full_name == full_name, 
-                                    cls.district[0].state == state,
-                                    cls.district[0].district_num == district_num,
-                                    cls.district[0].house == house,
+                                    cls.district.state == state,
+                                    cls.district.district_num == district_num,
+                                    cls.district.house == house,
                                     cls.serving == serving).one_or_none()
         print(rep)
         return rep
@@ -127,19 +118,15 @@ class User(db.Model):
     last_name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
     address = db.Column(db.String, nullable=False)
-    # home_district = db.relationship('District',
-    #                                 # secondary='users_districts',
-    #                                 backref='users')
     home_district_id = db.Column(db.Integer, db.ForeignKey('districts.id'))
+    home_district = db.relationship('District', backref='users')
+    # home_district = db.Column(db.Integer, db.ForeignKey('districts.id'))
     representatives = db.relationship('Representative',
                                     secondary='users_representatives')
-    interactions = db.relationship("Interaction", 
-                                    secondary='ints_users_reps_dists',
-                                    backref="user")
+
 
     @classmethod
-    def register(cls, username, password, first_name,
-                 last_name, email, address):
+    def register(cls, username, password, first_name, last_name, email, address, home_district=home_district):
         """Sets up user with a hashed password and returns"""
 
         hashed = bcrypt.generate_password_hash(password)
@@ -148,7 +135,7 @@ class User(db.Model):
 
         return cls(username=username, password=hashed_utf8, first_name=first_name,
                     last_name=last_name, email=email,
-                    address=address)
+                    address=address, home_district=home_district)
 
                     #need to add dosrict here
 
@@ -177,40 +164,21 @@ class Interaction(db.Model):
     medium = db.Column(db.String, nullable=False)
     topic = db.Column(db.String, nullable=False)
     content = db.Column(db.String, nullable=False)
-
-    interaction_dist_id = db.relationship(db.Integer, db.ForeignKey('districts.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    representative_id = db.Column(db.Integer, db.ForeignKey('representatives.id'), nullable=False)
-    projects = db.relationship('Project',
-                               secondary='employees_projects',
-                               backref='employees')
-    # interaction_dist_id = db.Column(db.Integer, db.ForeignKey('districts.id'), nullable=False)
-    # user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    # representative_id = db.Column(db.Integer, db.ForeignKey('representatives.id'), nullable=False)
-
-# class UserDistrict(db.Model):
-    """Mapping users to districts"""
-    __tablename__ = 'users_districts'
-
-    id = db.Column(db.Integer,
-                    primary_key=True,
-                    autoincrement=True)
-    user_id = db.Column(db.Integer,
-                        db.ForeignKey('users.id'))
-    district_id = db.Column(db.Integer,
-                            db.ForeignKey('districts.id'))
-
-# class RepresentativeDistrict(db.Model):
-    """Mapping representatives to districts"""
-    __tablename__ = "representatives_districts"
-
-    id = db.Column(db.Integer,
-                    primary_key=True,
-                    autoincrement=True)
-    rep_id = db.Column(db.Integer,
-                        db.ForeignKey('representatives.id'))
-    district_id = db.Column(db.Integer,
-                        db.ForeignKey('districts.id'))
+    
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('User',
+                            # secondary='ints_users_reps_dists',
+                            backref='interactions')
+    
+    rep_id = db.Column(db.Integer, db.ForeignKey('representatives.id'))
+    representative = db.relationship('Representative',
+                            # secondary='ints_users_reps_dists',
+                            backref='interactions')
+    
+    district_id = db.Column(db.Integer, db.ForeignKey('districts.id'))
+    district = db.relationship('District',
+                            # secondary='ints_users_reps_dists',
+                            backref='interactions')
 
 class UserRepresentative(db.Model):
     """Mapping users to representatives"""
@@ -224,16 +192,3 @@ class UserRepresentative(db.Model):
     representtive_id = db.Column(db.Integer,
                                 db.ForeignKey('representatives.id'))
 
-class Interactions_User_Rep_Dist(db.Model):
-    """Mapping Interactions to Users, Reps, and Dists"""
-    __tablename__ = 'ints_users_reps_dists'
-
-    id = db.Column(db.Integer,
-                    primary_key=True,
-                    autoincrement=True)
-    user_id = db.Column(db.Integer,
-                        db.ForeignKey('users.id'))
-    rep_id = db.Column(db.Integer,
-                        db.ForeignKey('representatives.id'))
-    dist_id = db.Column(db.Integer,
-                        db.ForeignKey('districts.id'))
