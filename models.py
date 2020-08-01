@@ -25,7 +25,7 @@ class District(db.Model):
                     primary_key=True,
                     autoincrement=True)
     state = db.Column(db.String, nullable=False)
-    district_num = db.Column(db.Integer, nullable=False)
+    district_num = db.Column(db.String, nullable=False)
     house = db.Column(db.String, nullable=False)
 
     @classmethod
@@ -34,7 +34,7 @@ class District(db.Model):
         
         dist = cls.query.filter(cls.state == state,
                                  cls.district_num == district_num,
-                                 cls.house == house).one()
+                                 cls.house == house).one_or_none()
 
         return dist
 
@@ -68,19 +68,26 @@ class Representative(db.Model):
     photo_url = db.Column(db.String)
     email = db.Column(db.String)
     serving = db.Column(db.Boolean, nullable=False)
+    website = db.Column(db.String)
 
     @classmethod
     def check_rep(cls, full_name, state, district_num, house, serving):
-        import pdb
-        pdb.set_trace()
+        # import pdb
+        # pdb.set_trace()
 
-        rep = cls.query.filter(cls.full_name == full_name, 
-                                    cls.district.state == state,
-                                    cls.district.district_num == district_num,
-                                    cls.district.house == house,
-                                    cls.serving == serving).one_or_none()
-        print(rep)
-        return rep
+        # rep = cls.query.filter(cls.full_name == full_name, 
+        #                             cls.district.state == state,
+        #                             cls.district.district_num == district_num,
+        #                             cls.district.house == house,
+        #                             cls.serving == serving).join(District).one_or_none()
+        reps = cls.query.filter(cls.full_name == full_name, 
+                                    cls.serving == serving).join(District).all()
+
+        for rep in reps:
+            if rep.district.state == state and rep.district.district_num == district_num and rep.district.house == house:
+                return rep
+        
+        return []
 
     
     def find_reps(address):
@@ -118,15 +125,15 @@ class User(db.Model):
     last_name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
     address = db.Column(db.String, nullable=False)
-    home_district_id = db.Column(db.Integer, db.ForeignKey('districts.id'))
-    home_district = db.relationship('District', backref='users')
+    # home_district_id = db.Column(db.Integer, db.ForeignKey('districts.id'))
+    # home_district = db.relationship('District', backref='users')
     # home_district = db.Column(db.Integer, db.ForeignKey('districts.id'))
     representatives = db.relationship('Representative',
                                     secondary='users_representatives')
 
 
     @classmethod
-    def register(cls, username, password, first_name, last_name, email, address, home_district=home_district):
+    def register(cls, username, password, first_name, last_name, email, address):
         """Sets up user with a hashed password and returns"""
 
         hashed = bcrypt.generate_password_hash(password)
@@ -135,7 +142,7 @@ class User(db.Model):
 
         return cls(username=username, password=hashed_utf8, first_name=first_name,
                     last_name=last_name, email=email,
-                    address=address, home_district=home_district)
+                    address=address)
 
                     #need to add dosrict here
 

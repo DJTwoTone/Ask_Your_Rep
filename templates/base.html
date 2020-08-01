@@ -12,8 +12,12 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <a class="navbar-brand" href="/">Ask Your Rep</a>
         <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-          <li class="nav-item"><a class="nav-link" href="/signup">Signup</a></li>
+          {% if 'curr_user' not in session %}
+            <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="/signup">Signup</a></li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+          {% endif %}
         </ul>
       </nav>
 

@@ -8,9 +8,9 @@ class RegistrationForm(FlaskForm):
     password = PasswordField("Password", validators=[InputRequired()])
     # add reenter password and logic for that
     
-    email = StringField("Email", validators=[InputRequired(), Email()])
     first_name = StringField("First Name", validators=[InputRequired()])
     last_name = StringField("Last Name", validators=[InputRequired()])
+    email = StringField("Email", validators=[InputRequired(), Email()])
     address = StringField("Address", validators=[InputRequired()])
 
 

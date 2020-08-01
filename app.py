@@ -1,9 +1,11 @@
-from flask import Flask, render_template, redirect, request, g
+from flask import Flask, render_template, redirect, request, g, session
 from flask_debugtoolbar import DebugToolbarExtension
 import requests
 
-from models import db, connect_db, User, Representative, District
+from models import db, connect_db, User, Representative, District, Office
 from forms import RegistrationForm, LoginForm
+
+CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///ask_your_rep_app'
@@ -19,11 +21,38 @@ app.config['SECRET_KEY'] = "Give me liberty, or give me death"
 
 debug = DebugToolbarExtension(app)
 
+@app.before_request
+def add_user_to_g():
+    """If we're logged in, add curr user to Flask global."""
+
+    if CURR_USER_KEY in session:
+        g.user = User.query.get(session[CURR_USER_KEY])
+
+    else:
+        g.user = None
+
+
+def login_user(user):
+    """Log in user."""
+
+    session[CURR_USER_KEY] = user.id
+
+
+def logout_user():
+    """Logout user."""
+
+    if CURR_USER_KEY in session:
+        del session[CURR_USER_KEY]
+
+
 @app.route("/")
 def home():
     """rendering the front page of the app"""
+    # import pdb
+    # pdb.set_trace()
+    if g.user:
 
-    """do something to see if user is logged in"""
+        return redirect("/user")
 
     return render_template('index.html')
 
@@ -37,7 +66,14 @@ def your_reps():
 @app.route("/user")
 def user_home():
 
-    return render_template('user.html')
+    if not g.user:
+
+        return redirect('signup')
+
+
+    user = g.user
+
+    return render_template('user.html', user=user)
 
 """"Possibly unneeded"""
 # @app.route("/user/redistrict")
@@ -106,22 +142,14 @@ def signup():
             email=rep.get('email'),
             serving=rep.get('active')
             state = rep.get('state')
-            district_num = rep.get('district_num')
-            house = rep.get('house')
+            district_num = str(rep.get('district'))
+            house = rep.get('chamber')
+            sources = rep.get('sources')
+            website = sources[0]['url']
 
             # if not Representative.check_rep(full_name, serving):
             if not Representative.check_rep(full_name, state, district_num, house, serving):
                 
-                r = Representative(first_name=first_name,
-                                    last_name=last_name,
-                                    full_name=full_name,
-                                    photo_url=photo_url,
-                                    email=email,
-                                    serving=serving,
-                                    )
-                db.session.add(r)
-                db.session.commit()
-
                 if not District.check_district(state=state, district_num=district_num, house=house):
                     dist = District(state=state, district_num=district_num, house=house)
                     db.session.add(dist)
@@ -130,56 +158,34 @@ def signup():
                 else:
                     dist = District.check_district(state=state, district_num=district_num, house=house)
                 
-                r.district.append(dist)
+                r = Representative(first_name=first_name,
+                                    last_name=last_name,
+                                    full_name=full_name,
+                                    district=dist,
+                                    photo_url=photo_url,
+                                    email=email,
+                                    serving=serving,
+                                    website=website
+                                    )
+                db.session.add(r)
                 db.session.commit()
 
-                for office in rep.offices:
-                    o = Office(phone=office.phone, address=office.address, location=office.name)
+                for office in rep['offices']:
+                    o = Office(phone=office["phone"], address=office["address"], location=office["name"])
 
                     r.offices.append(o)
                     db.session.commit()
 
             else:
 
-                # r = Representative.check_rep(full_name, serving)
                 r = Representative.check_rep(full_name, state, district_num, house, serving)
                 
             user.representatives.append(r)
             db.session.commit()
                 
-                
-                
-                
-                
-                
-                
-                
-                
-                # state = rep.get('state')
-                # district_num = rep.get('district'),
-                # house = rep.get('chamber')
-                
-                # if not District.check_district(
-                #                                 state=state,
-                #                                 district_num=district_num,
-                #                                 house=house
-                #                                 ):
-                #     dist = District(state=state, district_num=district_num, house=house)
-                #     session.add(dist)
-                #     session.commit()
-                # else:
-                #     dist = District.check_district(
-                #                                 state=state,
-                #                                 district_num=district_num,
-                #                                 house=house
-                #                                 )
+            login_user(user)
 
-                # import pdb
-                # pdb.set_trace()
-
-
-        # return reps
-        return redirect("/user", user=user)
+        return redirect("/")
 
     return render_template('signup.html', form=form, address=address)
 
