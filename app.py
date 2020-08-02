@@ -3,7 +3,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 import requests
 
 from models import db, connect_db, User, Representative, District, Office
-from forms import RegistrationForm, LoginForm
+from forms import RegistrationForm, LoginForm, InteractionForm
 
 CURR_USER_KEY = "curr_user"
 
@@ -45,6 +45,7 @@ def logout_user():
         del session[CURR_USER_KEY]
 
 
+
 @app.route("/")
 def home():
     """rendering the front page of the app"""
@@ -72,6 +73,8 @@ def user_home():
 
 
     user = g.user
+    # import pdb
+    # pdb.set_trace()
 
     return render_template('user.html', user=user)
 
@@ -96,9 +99,8 @@ def login():
         password = form.password.data
 
         user = User.authenticate(username, password)
-
         if user:
-            session["user_id"] = user.id
+            login_user(user)
             return redirect("/user")
         else:
             #refactor this to both
@@ -108,15 +110,8 @@ def login():
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
-
-    address = request.args['address']
+    
     form = RegistrationForm()
-    form.address.data = address
-    form.address.id = "search-input"
-    form.address.type = "search"
-
-    # import pdb
-    # pdb.set_trace()
 
     if form.validate_on_submit():
         username = form.username.data
@@ -126,8 +121,8 @@ def signup():
         last_name = form.last_name.data
         address = form.address.data
 
-        user = User.register(username, password, email,
-                            first_name, last_name, address)
+        user = User.register(username=username, password=password, email=email,
+                            first_name=first_name, last_name=last_name, address=address)
         db.session.add(user)
         db.session.commit()
         
@@ -146,6 +141,7 @@ def signup():
             house = rep.get('chamber')
             sources = rep.get('sources')
             website = sources[0]['url']
+            party = rep.get('party')
 
             # if not Representative.check_rep(full_name, serving):
             if not Representative.check_rep(full_name, state, district_num, house, serving):
@@ -165,7 +161,8 @@ def signup():
                                     photo_url=photo_url,
                                     email=email,
                                     serving=serving,
-                                    website=website
+                                    website=website,
+                                    party=party
                                     )
                 db.session.add(r)
                 db.session.commit()
@@ -187,17 +184,51 @@ def signup():
 
         return redirect("/")
 
+    if request.data != b'':
+        address = request.args['address']
+    else:
+        address = ''
+    form.address.data = address
+    form.address.id = "search-input"
+    form.address.type = "search"
+
     return render_template('signup.html', form=form, address=address)
 
 @app.route("/user/interactions")
 def interactions():
 
-    return render_template('interactions.html')
+    return render_template('interactions.html', user=g.user)
 
-@app.route("/user/interactions/add")
+@app.route("/user/interactions/add", methods=["GET", "POST"])
 def add_interaction():
 
-    return
+    form = InteractionForm()
+ 
+    if form.validate_on_submit():
+        interaction_date = form.interaction_date.data
+        representative = form.representative.data
+        medium = form.medium.data
+        topic = form.topic.data
+        content = form.content.data
+
+        #get rep
+        rep = Representative.query.get(representative)
+        #district
+        dist = District.query.get(rep.district.id)
+
+        interaction = Interaction(user=g.user, representative=rep, district=dist, interaction_date=interaction_date, medium=medium, topic=topic, content=content)
+        db.session.add(interaction)
+
+        db.session.commit()
+
+        return redirect('/user/interactions')
+
+
+    reps = [(rep.id, rep.full_name) for rep in g.user.representatives]
+    repid = request.args['repId']
+    form.representative.choices = reps
+    form.representative.default = repid
+    return render_template('add-interaction.html', form=form)
 
 @app.route("/user/interaction/edit")
 def edit_interaction():
@@ -208,4 +239,11 @@ def edit_interaction():
 def del_interaction():
 
     return
+
+@app.route("/logout")
+def logout():
+
+    logout_user()
+
+    return redirect('/')
     

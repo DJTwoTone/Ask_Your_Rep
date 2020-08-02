@@ -19,9 +19,9 @@
             </div>
             <ul class="list-group list-group-flush">
               <li class="list-group-item">{{rep.party}}</li>
-              <li class="list-group-item">{{rep.chamber |capitalize}}</li>
-              <li class="list-group-item">{{rep.district}}</li>
-              <li class="list-group-item">{{rep.state |upper}}</li>
+              <li class="list-group-item">{{rep.district.house |capitalize}}</li>
+              <li class="list-group-item">{{rep.district.district_num}}</li>
+              <li class="list-group-item">{{rep.district.state |upper}}</li>
               <li class="list-group-item">{{rep.email}}</li>
               <li class="list-group-item">{{rep.website}}</li>
             </ul>
@@ -34,6 +34,10 @@
 
               {% endfor %}
             </div>
+            <form action="/user/interactions/add">
+              <input type="hidden" id="repId" name="repId" value={{rep.id}}>
+              <button type="submit">Interact with this Representative</button>
+            </form>
           </div>
         {% endfor %}
       </div>

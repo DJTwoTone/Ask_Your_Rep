@@ -69,6 +69,7 @@ class Representative(db.Model):
     email = db.Column(db.String)
     serving = db.Column(db.Boolean, nullable=False)
     website = db.Column(db.String)
+    party = db.Column(db.String)
 
     @classmethod
     def check_rep(cls, full_name, state, district_num, house, serving):
@@ -151,7 +152,8 @@ class User(db.Model):
         """Authenticates the username and password"""
 
         user = User.query.filter_by(username=username).first()
-
+        print('auth-user')
+        print(user)
         if user and bcrypt.check_password_hash(user.password, password):
             return user
         else:

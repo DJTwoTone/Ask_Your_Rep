@@ -1,12 +1,14 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
-from wtforms.validators import InputRequired, Email
+from wtforms import StringField, PasswordField, DateField, SelectField
+from wtforms.validators import InputRequired, Email, EqualTo, Length
 
 class RegistrationForm(FlaskForm):
 
     username = StringField("Username", validators=[InputRequired()])
-    password = PasswordField("Password", validators=[InputRequired()])
-    # add reenter password and logic for that
+    password = PasswordField("Password", validators=[InputRequired(), 
+                                                    EqualTo('confirm', message="Your passwords must match."), 
+                                                    Length(min=8, message="your password must be at least 8 characters.")])
+    confirm = PasswordField("Re-eneter your password")
     
     first_name = StringField("First Name", validators=[InputRequired()])
     last_name = StringField("Last Name", validators=[InputRequired()])
@@ -18,3 +20,15 @@ class LoginForm(FlaskForm):
 
     username = StringField("Username", validators=[InputRequired()])
     password = PasswordField("Password", validators=[InputRequired()])
+
+class InteractionForm(FlaskForm):
+    interaction_date = DateField('When did you interact with your representative?', format='%m-%d-%Y')
+    representative = SelectField('Who did you talk to?', coerce=int)
+    medium = SelectField('How did you contact your representative?', choices=[('telephone', 'telephone'), 
+                                                                                ('email', 'email'),
+                                                                                ('mail', 'traditional mail'),
+                                                                                ('in-person', 'in-person'),
+                                                                                ('telegram', 'telegram')
+                                                                                ])
+    topic = StringField('What was the topic of your interaction?', validators=[InputRequired()])
+    content = StringField('What did you discuss?', validators=[InputRequired()])
