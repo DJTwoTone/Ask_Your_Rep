@@ -3,7 +3,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 import requests
 
 from models import db, connect_db, User, Representative, District, Office, Interaction
-from forms import RegistrationForm, LoginForm, InteractionForm
+from forms import RegistrationForm, LoginForm, InteractionForm, EditUserForm
 
 CURR_USER_KEY = "curr_user"
 
@@ -81,6 +81,8 @@ def user_home():
 
 @app.route("/user/edit")
 def edit_user():
+
+    
 
     return render_template('edit-user.html')
 

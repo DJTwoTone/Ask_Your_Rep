@@ -126,9 +126,6 @@ class User(db.Model):
     last_name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
     address = db.Column(db.String, nullable=False)
-    # home_district_id = db.Column(db.Integer, db.ForeignKey('districts.id'))
-    # home_district = db.relationship('District', backref='users')
-    # home_district = db.Column(db.Integer, db.ForeignKey('districts.id'))
     representatives = db.relationship('Representative',
                                     secondary='users_representatives')
 
@@ -152,12 +149,18 @@ class User(db.Model):
         """Authenticates the username and password"""
 
         user = User.query.filter_by(username=username).first()
-        print('auth-user')
-        print(user)
+
         if user and bcrypt.check_password_hash(user.password, password):
             return user
         else:
             return False
+
+    def edit_user(self, password, first_name, last_name, email, address, representatives):
+
+
+        if bcrypt.check_password_hash(user.password, password):
+            self
+
 
 class Interaction(db.Model):
     """interactions between user and reps"""
