@@ -13,16 +13,16 @@
     {% for field in form 
         if field.widget.input_type != 'hidden' %}
 
-        <p>
+
             {{ field.label }}
-            {{ field }}
+            {{ field(class_="form-control") }}
 
             {% for error in field.errors %}
-            {{ error }}
+                {{ error }}
             {% endfor %}
-        </p>
+
     {% endfor %}
-        <button type="submit">Add Interaction</button>
+        <button type="submit" class="btn btn-primary">Add Interaction</button>
 </form>
 
 {% endblock %}

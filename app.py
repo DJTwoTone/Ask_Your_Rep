@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, request, g, session
 from flask_debugtoolbar import DebugToolbarExtension
 import requests
 
-from models import db, connect_db, User, Representative, District, Office
+from models import db, connect_db, User, Representative, District, Office, Interaction
 from forms import RegistrationForm, LoginForm, InteractionForm
 
 CURR_USER_KEY = "curr_user"
@@ -78,11 +78,6 @@ def user_home():
 
     return render_template('user.html', user=user)
 
-""""Possibly unneeded"""
-# @app.route("/user/redistrict")
-# def redistrict():
-
-#     return
 
 @app.route("/user/edit")
 def edit_user():
@@ -203,13 +198,22 @@ def interactions():
 def add_interaction():
 
     form = InteractionForm()
+    reps = [(rep.id, rep.full_name) for rep in g.user.representatives]
+    repid = request.args['repId']
+    form.representative.choices = reps
+    form.representative.default = repid
  
     if form.validate_on_submit():
+
+        # import pdb
+        # pdb.set_trace()
+
         interaction_date = form.interaction_date.data
         representative = form.representative.data
         medium = form.medium.data
         topic = form.topic.data
         content = form.content.data
+
 
         #get rep
         rep = Representative.query.get(representative)
@@ -224,10 +228,6 @@ def add_interaction():
         return redirect('/user/interactions')
 
 
-    reps = [(rep.id, rep.full_name) for rep in g.user.representatives]
-    repid = request.args['repId']
-    form.representative.choices = reps
-    form.representative.default = repid
     return render_template('add-interaction.html', form=form)
 
 @app.route("/user/interaction/edit")
@@ -235,10 +235,12 @@ def edit_interaction():
 
     return
 
-@app.route("/user/interaction/delete")
-def del_interaction():
 
-    return
+#I'm not sure I want to do this
+# @app.route("/user/interaction/delete")
+# def del_interaction():
+
+#     return
 
 @app.route("/logout")
 def logout():

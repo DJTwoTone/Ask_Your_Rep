@@ -62,7 +62,7 @@ class Representative(db.Model):
     last_name = db.Column(db.String, nullable=False)
     full_name = db.Column(db.String, nullable=False)
     district_id = db.Column(db.Integer, db.ForeignKey('districts.id'))
-    district = db.relationship("District", backref='repersentatives')
+    district = db.relationship("District", backref='representatives')
     offices = db.relationship('Office',
                                 backref='representative', cascade="all,delete")
     photo_url = db.Column(db.String)
@@ -198,6 +198,6 @@ class UserRepresentative(db.Model):
                     autoincrement=True)
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.id'))
-    representtive_id = db.Column(db.Integer,
+    representive_id = db.Column(db.Integer,
                                 db.ForeignKey('representatives.id'))
 

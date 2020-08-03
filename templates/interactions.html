@@ -6,7 +6,22 @@
 
 {% for interaction in user.interactions %}
 
-{{interaction}}
+
+<div class="card">
+    <div class="card-header">
+      Interaction with:
+      {{interaction.user.first_name}} {{interaction.user.last_name}}
+      and
+      {{interaction.representative.full_name}}
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">{{interaction.topic}}</h5>
+        <p class="card-text"><small class="text-muted">{{interaction.interaction_date}}</small></p>
+        <p class="card-text">{{interaction.content}}</p>
+        <p class="card-text"><small class="text-muted">via: {{interaction.medium}}</small></p>
+    </div>
+  </div>
+
 
 {% endfor %}
 
