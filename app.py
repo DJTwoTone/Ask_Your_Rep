@@ -5,6 +5,7 @@ import requests
 from models import db, connect_db, User, Representative, District, Office, Interaction
 from forms import RegistrationForm, LoginForm, InteractionForm, EditUserForm
 
+
 CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
@@ -20,14 +21,14 @@ app.config['SECRET_KEY'] = "Give me liberty, or give me death"
 # openStatesKey = '0c190e42-7c55-4ea7-98f4-0d9935580b33'
 
 debug = DebugToolbarExtension(app)
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 @app.before_request
 def add_user_to_g():
-    """If we're logged in, add curr user to Flask global."""
+    """If we're logged in, add curr_user to Flask global."""
 
     if CURR_USER_KEY in session:
         g.user = User.query.get(session[CURR_USER_KEY])
-
     else:
         g.user = None
 
@@ -44,8 +45,6 @@ def logout_user():
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
 
-
-
 @app.route("/")
 def home():
     """rendering the front page of the app"""
@@ -59,9 +58,11 @@ def home():
 
 @app.route("/your-reps")
 def your_reps():
+
     address = request.args['search-input']
 
     reps = Representative.find_reps(address)
+
     return render_template('reps.html', reps=reps, address=address)
 
 @app.route("/user")
@@ -70,7 +71,6 @@ def user_home():
     if not g.user:
 
         return redirect('signup')
-
 
     user = g.user
     # import pdb
@@ -82,9 +82,21 @@ def user_home():
 @app.route("/user/edit")
 def edit_user():
 
-    
+    form = EditUserForm(obj=g.user)
 
-    return render_template('edit-user.html')
+    if form.validate_on_submit():
+        first_name = form.first_name.data
+        last_name = form.last_name.data
+        email = form.email.data
+        address = form.address.data
+    
+        return redirect('/user')
+
+
+    form.address.id = "search-input"
+    form.address.type = "search"
+    
+    return render_template('edit-user.html', form=form, user=g.user)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -199,11 +211,13 @@ def interactions():
 @app.route("/user/interactions/add", methods=["GET", "POST"])
 def add_interaction():
 
+    print('start the render')
     form = InteractionForm()
     reps = [(rep.id, rep.full_name) for rep in g.user.representatives]
     repid = request.args['repId']
     form.representative.choices = reps
     form.representative.default = repid
+    form.process()
  
     if form.validate_on_submit():
 
@@ -216,26 +230,28 @@ def add_interaction():
         topic = form.topic.data
         content = form.content.data
 
-
-        #get rep
         rep = Representative.query.get(representative)
-        #district
         dist = District.query.get(rep.district.id)
-
-        interaction = Interaction(user=g.user, representative=rep, district=dist, interaction_date=interaction_date, medium=medium, topic=topic, content=content)
+        interaction = Interaction(user=g.user, 
+                                    representative=rep, 
+                                    district=dist, 
+                                    interaction_date=interaction_date, 
+                                    medium=medium, 
+                                    topic=topic, 
+                                    content=content)
         db.session.add(interaction)
-
         db.session.commit()
 
         return redirect('/user/interactions')
-
 
     return render_template('add-interaction.html', form=form)
 
 @app.route("/user/interaction/edit")
 def edit_interaction():
 
-    return
+    
+
+    return render_template('edit-interaction.html', form=form, user=g.user)
 
 
 #I'm not sure I want to do this

@@ -155,11 +155,14 @@ class User(db.Model):
         else:
             return False
 
-    def edit_user(self, password, first_name, last_name, email, address, representatives):
+    def edit_user(self, first_name, last_name, email, address, representatives):
+        
+        self.first_name = first_name
+        self.last_name = last_name
+        self.email = email
+        self.address = address
+        self.representatives = representatives
 
-
-        if bcrypt.check_password_hash(user.password, password):
-            self
 
 
 class Interaction(db.Model):
@@ -191,6 +194,11 @@ class Interaction(db.Model):
     district = db.relationship('District',
                             # secondary='ints_users_reps_dists',
                             backref='interactions')
+
+    # def edit_interaction(self, interaction_date, medium, topic, content):
+    #     return
+
+
 
 class UserRepresentative(db.Model):
     """Mapping users to representatives"""

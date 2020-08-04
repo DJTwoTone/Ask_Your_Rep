@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, DateField, SelectField
+from wtforms import StringField, PasswordField, SelectField
 from wtforms.validators import InputRequired, Email, EqualTo, Length
+from wtforms.fields.html5 import DateField
 
 class RegistrationForm(FlaskForm):
 
@@ -21,7 +22,7 @@ class LoginForm(FlaskForm):
     password = PasswordField("Password", validators=[InputRequired()])
 
 class InteractionForm(FlaskForm):
-    interaction_date = DateField('When did you interact with your representative?', format='%m-%d-%Y')
+    interaction_date = DateField('When did you interact with your representative?')
     representative = SelectField('Who did you talk to?', coerce=int)
     medium = SelectField('How did you contact your representative?', choices=[('telephone', 'telephone'), 
                                                                                 ('email', 'email'),
@@ -38,11 +39,10 @@ class EditUserForm(FlaskForm):
     last_name = StringField("Last Name", validators=[InputRequired()])
     email = StringField("Email", validators=[InputRequired(), Email()])
     address = StringField("Address", validators=[InputRequired()])
-    password = PasswordField("Password", validators=[InputRequired()])   
 
 class EditInteractionForm(FlaskForm):
 
-    password = PasswordField("Password", validators=[InputRequired()]) 
+    interaction_date = DateField('When did you interact with your representative?', format='%m-%d-%Y')
     medium = SelectField('How did you contact your representative?', choices=[('telephone', 'telephone'), 
                                                                                 ('email', 'email'),
                                                                                 ('mail', 'traditional mail'),
