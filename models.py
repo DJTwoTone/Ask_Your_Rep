@@ -38,6 +38,14 @@ class District(db.Model):
 
         return dist
 
+    @classmethod
+    def add_district(cls, state, district_num, house):
+        dist = cls(state=state, district_num=district_num, house=house)
+        db.session.add(dist)
+        db.session.commit()
+
+    
+
 class Office(db.Model):
     """Representatives's offices"""
     __tablename__ = 'offices'
@@ -50,6 +58,11 @@ class Office(db.Model):
     phone = db.Column(db.String)
     address = db.Column(db.String)
     location = db.Column(db.String)
+
+    @classmethod
+    def add_office(cls, office):
+        return cls(phone=office["phone"], address=office["address"], location=office["name"])
+
 
 class Representative(db.Model):
     """Representatives"""
@@ -76,11 +89,6 @@ class Representative(db.Model):
         # import pdb
         # pdb.set_trace()
 
-        # rep = cls.query.filter(cls.full_name == full_name, 
-        #                             cls.district.state == state,
-        #                             cls.district.district_num == district_num,
-        #                             cls.district.house == house,
-        #                             cls.serving == serving).join(District).one_or_none()
         reps = cls.query.filter(cls.full_name == full_name, 
                                     cls.serving == serving).join(District).all()
 
@@ -111,6 +119,60 @@ class Representative(db.Model):
                         })
         return repsResp.json()
 
+    @classmethod
+    def add_rep(cls, rep):
+            full_name = rep.get('full_name')
+            first_name=rep.get('first_name')
+            last_name=rep.get('last_name')
+            full_name=rep.get('full_name')
+            photo_url=rep.get('photo_url')
+            email=rep.get('email')
+            serving=rep.get('active')
+            state = rep.get('state')
+            district_num = str(rep.get('district'))
+            house = rep.get('chamber')
+            sources = rep.get('sources')
+            website = sources[0]['url']
+            party = rep.get('party')
+            offices = rep.get('offices')
+
+            if not cls.check_rep(full_name, state, district_num, house, serving):
+                
+                if not District.check_district(state=state, district_num=district_num, house=house):
+                    dist = District.add_district(state=state, district_num=district_num, house=house)
+
+                else:
+                    dist = District.check_district(state=state, district_num=district_num, house=house)
+                
+                r = cls(first_name=first_name,
+                                    last_name=last_name,
+                                    full_name=full_name,
+                                    district=dist,
+                                    photo_url=photo_url,
+                                    email=email,
+                                    serving=serving,
+                                    website=website,
+                                    party=party
+                                    )
+                db.session.add(r)
+                db.session.commit()
+
+                for office in offices:
+                    # import pdb
+                    # pdb.set_trace()
+
+                    o = Office.add_office(office)
+
+                    r.offices.append(o)
+                    db.session.commit()
+
+                return r
+
+            else:
+
+                return Representative.check_rep(full_name, state, district_num, house, serving)
+                
+
 class User(db.Model):
     """Users"""
     __tablename__ = 'users'
@@ -138,11 +200,13 @@ class User(db.Model):
 
         hashed_utf8 = hashed.decode("utf8")
 
-        return cls(username=username, password=hashed_utf8, first_name=first_name,
+        user = cls(username=username, password=hashed_utf8, first_name=first_name,
                     last_name=last_name, email=email,
                     address=address)
+        db.session.add(user)
+        db.session.commit()
 
-                    #need to add dosrict here
+        return user
 
     @classmethod
     def authenticate(cls, username, password):
@@ -155,13 +219,21 @@ class User(db.Model):
         else:
             return False
 
-    def edit_user(self, first_name, last_name, email, address, representatives):
+    def edit_user(self, first_name, last_name, email, address):
         
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
         self.address = address
-        self.representatives = representatives
+        self.representatives = []
+        reps = Representative.find_reps(address)
+        for rep in reps:
+            r = Representative.add_rep(rep)
+            self.representatives.append(r)
+
+
+
+
 
 
 
