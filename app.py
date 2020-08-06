@@ -3,7 +3,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 import requests
 
 from models import db, connect_db, User, Representative, District, Office, Interaction
-from forms import RegistrationForm, LoginForm, InteractionForm, EditUserForm
+from forms import RegistrationForm, LoginForm, InteractionForm, EditUserForm, EditInteractionForm
 
 
 CURR_USER_KEY = "curr_user"
@@ -84,6 +84,8 @@ def user_home():
 def edit_user():
 
     form = EditUserForm(obj=g.user)
+    form.address.id = "search-input"
+    form.address.type = "search"
 
     if form.validate_on_submit():
         first_name = form.first_name.data
@@ -101,8 +103,6 @@ def edit_user():
         return redirect('/user')
 
 
-    form.address.id = "search-input"
-    form.address.type = "search"
     
     return render_template('edit-user.html', form=form, user=g.user)
 
@@ -179,12 +179,12 @@ def add_interaction():
     repid = request.args['repId']
     form.representative.choices = reps
     form.representative.default = repid
-    form.process()
+    # form.process()
+    # import pdb
+    # pdb.set_trace()
  
     if form.validate_on_submit():
 
-        # import pdb
-        # pdb.set_trace()
 
         interaction_date = form.interaction_date.data
         representative = form.representative.data
@@ -208,12 +208,30 @@ def add_interaction():
 
     return render_template('add-interaction.html', form=form)
 
-@app.route("/user/interaction/edit")
-def edit_interaction():
+@app.route("/user/interaction/<interaction_id>/edit")
+def edit_interaction(interaction_id):
+
+    interaction = Interaction.query.get_or_404(interaction_id)
+
+    form = EditInteractionForm(obj=interaction)
+
+    if form.validate_on_submit():
+
+        interaction_date = form.interaction_date.data
+        medium = form.medium.data
+        topic = form.topic.data
+        content = form.topic.data
+
+        Interaction.edit_interaction(interaction_date=interaction_date,
+                                        medium=medium,
+                                        topic=topic,
+                                        content=content)
+
+        return redirect('user/interactions')
 
     
 
-    return render_template('edit-interaction.html', form=form, user=g.user)
+    return render_template('edit-interaction.html', form=form, user=g.user, interaction=interaction)
 
 
 #I'm not sure I want to do this

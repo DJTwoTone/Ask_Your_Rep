@@ -12,9 +12,12 @@
     
     {% for field in form 
         if field.widget.input_type != 'hidden' %}
+            <p>
+                {{ field.label }}
+                {{ field(class_="form-control") }}
 
-            {{ field.label }}
-            {{ field(class_="form-control") }}
+
+            </p>
 
             {% for error in field.errors %}
                 {{ error }}

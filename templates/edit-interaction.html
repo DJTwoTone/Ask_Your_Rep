@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<p>Editing interaction between {{user.username}} </p>
+<p>Editing interaction between {{user.username}} and {{interaction.representative.full_name}}</p>
 
 <form method="POST">
 
@@ -21,7 +21,7 @@
         {% endfor %}
     </p>
     {% endfor %}
-    <button type="submit">Change Your Info</button>
+    <button type="submit">Change Your Interaction</button>
 
 </form>
 

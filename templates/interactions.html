@@ -20,7 +20,8 @@
         <p class="card-text">{{interaction.content}}</p>
         <p class="card-text"><small class="text-muted">via: {{interaction.medium}}</small></p>
     </div>
-  </div>
+    <a href="/user/interaction/{{interaction.id}}/edit" class="btn btn-primary">Edit This Interaction</a>
+</div>
 
 
 {% endfor %}

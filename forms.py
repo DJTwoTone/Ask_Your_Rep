@@ -24,12 +24,8 @@ class LoginForm(FlaskForm):
 class InteractionForm(FlaskForm):
     interaction_date = DateField('When did you interact with your representative?')
     representative = SelectField('Who did you talk to?', coerce=int)
-    medium = SelectField('How did you contact your representative?', choices=[('telephone', 'telephone'), 
-                                                                                ('email', 'email'),
-                                                                                ('mail', 'traditional mail'),
-                                                                                ('in-person', 'in-person'),
-                                                                                ('telegram', 'telegram')
-                                                                                ])
+    comm_choices = [('telephone', 'telephone'), ('email', 'email'), ('mail', 'traditional mail'), ('in-person', 'in-person'), ('telegram', 'telegram')]
+    medium = SelectField('How did you contact your representative?', choices=comm_choices)
     topic = StringField('What was the topic of your interaction?', validators=[InputRequired()])
     content = StringField('What did you discuss?', validators=[InputRequired()])
 
@@ -43,11 +39,7 @@ class EditUserForm(FlaskForm):
 class EditInteractionForm(FlaskForm):
 
     interaction_date = DateField('When did you interact with your representative?', format='%m-%d-%Y')
-    medium = SelectField('How did you contact your representative?', choices=[('telephone', 'telephone'), 
-                                                                                ('email', 'email'),
-                                                                                ('mail', 'traditional mail'),
-                                                                                ('in-person', 'in-person'),
-                                                                                ('telegram', 'telegram')
-                                                                                ])
+    comm_choices = [('telephone', 'telephone'), ('email', 'email'), ('mail', 'traditional mail'), ('in-person', 'in-person'), ('telegram', 'telegram')]
+    medium = SelectField('How did you contact your representative?', choices=comm_choices)
     topic = StringField('What was the topic of your interaction?', validators=[InputRequired()])
     content = StringField('What did you discuss?', validators=[InputRequired()])

@@ -44,6 +44,8 @@ class District(db.Model):
         db.session.add(dist)
         db.session.commit()
 
+        return dist
+
     
 
 class Office(db.Model):
@@ -132,11 +134,14 @@ class Representative(db.Model):
             district_num = str(rep.get('district'))
             house = rep.get('chamber')
             sources = rep.get('sources')
-            website = sources[0]['url']
+            if sources == []:
+                website = ''
+            else:
+                website = sources[0]['url']
             party = rep.get('party')
             offices = rep.get('offices')
 
-            if not cls.check_rep(full_name, state, district_num, house, serving):
+            if not Representative.check_rep(full_name, state, district_num, house, serving):
                 
                 if not District.check_district(state=state, district_num=district_num, house=house):
                     dist = District.add_district(state=state, district_num=district_num, house=house)
@@ -144,6 +149,8 @@ class Representative(db.Model):
                 else:
                     dist = District.check_district(state=state, district_num=district_num, house=house)
                 
+                # import pdb
+                # pdb.set_trace()
                 r = cls(first_name=first_name,
                                     last_name=last_name,
                                     full_name=full_name,
@@ -154,6 +161,9 @@ class Representative(db.Model):
                                     website=website,
                                     party=party
                                     )
+
+                # import pdb
+                # pdb.set_trace()        
                 db.session.add(r)
                 db.session.commit()
 
@@ -231,11 +241,7 @@ class User(db.Model):
             r = Representative.add_rep(rep)
             self.representatives.append(r)
 
-
-
-
-
-
+        db.session.commit()
 
 class Interaction(db.Model):
     """interactions between user and reps"""
@@ -267,8 +273,13 @@ class Interaction(db.Model):
                             # secondary='ints_users_reps_dists',
                             backref='interactions')
 
-    # def edit_interaction(self, interaction_date, medium, topic, content):
-    #     return
+    def edit_interaction(self, interaction_date, medium, topic, content):
+        self.interaction_date = interaction_date
+        self.medium = medium
+        self.topic = topic
+        self.content = content
+
+        db.session.commit()
 
 
 
