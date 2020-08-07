@@ -46,6 +46,8 @@ def logout_user():
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
 
+    return redirect('/')
+
 @app.route("/")
 def home():
     """rendering the front page of the app"""

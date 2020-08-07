@@ -1,6 +1,6 @@
 # TODOS
 
-    - refactor disticts to one to many
+    - ~~refactor disticts to one to many~~
     
     - ~~base.html~~
         - depencies to add?
@@ -20,6 +20,8 @@
     - add a countdown timer until elections / reelection times?
     - transition animations?
     - links to recordings and pictures
+    - eagle scream?
+    - state mottos?
 
 
 # PONDERS
@@ -33,11 +35,11 @@
     - news search for name / display as sidebar or ?
     - Flask blueprints
     - mobility?
-    - what to with rep ids?
+    - ~~what to with rep ids?~~
 
 # REMEMBER
 
-    - Keep things dry an seperate
+    - Keep things dry and seperate
     - User first!
     - edge cases?
 
