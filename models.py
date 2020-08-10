@@ -121,6 +121,9 @@ class Representative(db.Model):
                         })
         return repsResp.json()
 
+
+
+    #this needs to be broken down some
     @classmethod
     def add_rep(cls, rep):
             full_name = rep.get('full_name')
@@ -135,7 +138,7 @@ class Representative(db.Model):
             house = rep.get('chamber')
             sources = rep.get('sources')
             if sources == []:
-                website = ''
+                website = 'None'
             else:
                 website = sources[0]['url']
             party = rep.get('party')

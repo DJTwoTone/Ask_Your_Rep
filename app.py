@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, g, session
+from flask import Flask, render_template, redirect, request, g, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
 import requests
 
@@ -46,6 +46,7 @@ def logout_user():
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
 
+
     return redirect('/')
 
 @app.route("/")
@@ -66,13 +67,16 @@ def your_reps():
 
     reps = Representative.find_reps(address)
 
+    if not reps:
+        flash("No representatives found for the address. Please recheck your address")
+        flash("*NOTE: This is designed to find US state representatives only.")
     return render_template('reps.html', reps=reps, address=address)
 
 @app.route("/user")
 def user_home():
 
     if not g.user:
-
+        flash("Please sign up to access user functionality")
         return redirect('signup')
 
     user = g.user
@@ -101,7 +105,7 @@ def edit_user():
                         last_name=last_name,
                         email=email,
                         address=address)
- 
+        flash("Your persomal information has been successfully edited")
         return redirect('/user')
 
 
@@ -123,7 +127,8 @@ def login():
             return redirect("/user")
         else:
             #refactor this to both
-            form.username.errors = ["There's a problem with your username or password."]
+            form.username.errors = ["There's a problem with your username."]
+            form.passowrd.errors = ["There's a problem with your password."]
 
     return render_template('login.html', form=form)
 
@@ -152,7 +157,8 @@ def signup():
             db.session.commit()
                 
             login_user(user)
-
+        flash("Signup successful")
+        flash("Welcome")
         return redirect("/")
 
     # import pdb
@@ -206,6 +212,7 @@ def add_interaction():
         db.session.add(interaction)
         db.session.commit()
 
+        flash("Interaction sucessfully added")
         return redirect('/user/interactions')
 
     return render_template('add-interaction.html', form=form)
@@ -229,6 +236,7 @@ def edit_interaction(interaction_id):
                                         topic=topic,
                                         content=content)
 
+        flash("Interaction successfully edited")
         return redirect('user/interactions')
 
     
@@ -247,5 +255,6 @@ def logout():
 
     logout_user()
 
+    flash("You have been logged out")
     return redirect('/')
     

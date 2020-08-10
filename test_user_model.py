@@ -20,4 +20,7 @@ from app import app
 db.create_all()
 
 class UserModelTestCase(TestCase):
-    
+    """Tests the User model"""
+
+    def setUp(self):
+        """"""
