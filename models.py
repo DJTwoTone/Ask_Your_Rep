@@ -276,6 +276,18 @@ class Interaction(db.Model):
                             # secondary='ints_users_reps_dists',
                             backref='interactions')
 
+    @classmethod
+    def add_intertaction(cls, user, representative, district, interaction_date, medium, topic, content):
+        interaction = cls(user=user, 
+                            representative=representative, 
+                            district=district, 
+                            interaction_date=interaction_date, 
+                            medium=medium, 
+                            topic=topic, 
+                            content=content)
+        db.session.add(interaction)
+        db.session.commit()
+    
     def edit_interaction(self, interaction_date, medium, topic, content):
         self.interaction_date = interaction_date
         self.medium = medium

@@ -187,7 +187,6 @@ def add_interaction():
     repid = request.args['repId']
     form.representative.choices = reps
     form.representative.default = repid
-    # form.process()
     # import pdb
     # pdb.set_trace()
  
@@ -202,27 +201,29 @@ def add_interaction():
 
         rep = Representative.query.get(representative)
         dist = District.query.get(rep.district.id)
-        interaction = Interaction(user=g.user, 
+        Interaction.add_intertaction(user=g.user, 
                                     representative=rep, 
                                     district=dist, 
                                     interaction_date=interaction_date, 
                                     medium=medium, 
                                     topic=topic, 
                                     content=content)
-        db.session.add(interaction)
-        db.session.commit()
 
         flash("Interaction sucessfully added")
         return redirect('/user/interactions')
+    form.process()
 
     return render_template('add-interaction.html', form=form)
 
-@app.route("/user/interaction/<interaction_id>/edit")
+@app.route("/user/interaction/<interaction_id>/edit", methods=["GET", "POST"])
 def edit_interaction(interaction_id):
 
     interaction = Interaction.query.get_or_404(interaction_id)
 
+    # import pdb
+    # pdb.set_trace()
     form = EditInteractionForm(obj=interaction)
+
 
     if form.validate_on_submit():
 
@@ -231,15 +232,16 @@ def edit_interaction(interaction_id):
         topic = form.topic.data
         content = form.topic.data
 
-        Interaction.edit_interaction(interaction_date=interaction_date,
+        interaction.edit_interaction(interaction_date=interaction_date,
                                         medium=medium,
                                         topic=topic,
                                         content=content)
 
         flash("Interaction successfully edited")
-        return redirect('user/interactions')
+        return redirect('/user/interactions')
 
-    
+    # form.interaction_date.value = f"{interaction.interaction_date.year}-{interaction.interaction_date.month}-{interaction.interaction_date.day}"
+    # form.process()
 
     return render_template('edit-interaction.html', form=form, user=g.user, interaction=interaction)
 

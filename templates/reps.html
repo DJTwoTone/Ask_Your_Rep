@@ -8,40 +8,56 @@
 <p>{{address}}</p>
 
 <div class="container">
-    <div class="row d-flex justify-content-around">
+  <div class="row d-flex justify-content-around">
 
-        {% for rep in reps %}
-        <div class="card p-3" style="width: 20rem;">
-            <img src="{{rep.photo_url}}" class="card-img-top rounded-circle" alt="{{rep.full_name}}">
-            <div class="card-body">
-              <h5 class="card-title">{{rep.full_name}}</h5>
-            </div>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">{{rep.party}}</li>
-              <li class="list-group-item">{{rep.chamber |capitalize}}</li>
-              <li class="list-group-item">{{rep.district}}</li>
-              <li class="list-group-item">{{rep.state |upper}}</li>
-              <li class="list-group-item">{{rep.email}}</li>
-              <li class="list-group-item">{{rep.website}}</li>
-            </ul>
-            <div>
-              {% for office in rep.offices %}
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item">{{office.name}}</li>
-                <li class="list-group-item">{{office.phone}}</li>
-                <li class="list-group-item">{{office.address}}</li>
-
-              {% endfor %}
-            </div>
+    {% for rep in reps %}
+      <div class="card " style="width: 75%;">
+        <div class="row">
+          <div class="col-3">
+            <img src="{{rep.photo_url}}" class="img-thumbnail rounded-circle" alt="{{rep.full_name}}">
           </div>
-        {% endfor %}
+          <div class="col-9">
+            <div class="card-body">
+              <h3 class="card-title display-3">{{rep.full_name}}</h3>
+            </div>
+              <p class="text-muted text-right">{{rep.party}}</p>
+              <p class="h3 card-text">{{rep.state |upper}} State - {{rep.chamber |capitalize}} House - District {{rep.district}}</p>
+              
+            {% if rep.email %}
+              <p class="card-text">{{rep.first_name}} can be reached at <a href="mailto:{{rep.email}}"> {{rep.email}} </a></p>
+            {% else %}
+              <p class="card-text">{{rep.first_name}} doesn't seem to have a registered email address. You may want to contact them personally.</p>
+            {% endif %}
+              
+            {% if rep.website %}
+              <p class="card-text">{{rep.first_name}}'s website can be found at <a href="{{rep.website}}">{{rep.website}}</a></p>
+            {% else %}
+              <p class="card-text">{{rep.first_name}} doesn't seem to have a registered website. You may want to contact them personally.</p>
+            {% endif %}
+
+          </div>
+        </div>
+        <div class="row d-flex justify-content-around">
+
+          {% for office in rep.offices %}
+          <div class="col-{{12/rep.offices|length}} m-1">
+            <p class="h4">{{office.name}}</p>
+            <p class="card-text">Phone number: <a href="tel:{{office.phone}}">Call {{office.phone}}</a>
+            <p class="card-text">Address: {{office.address}}</p>
+            </p>
+          </div>                 
+          {% endfor %}
+        </div>
       </div>
-      <p>Signup and keep track of your representatiives</p>
-      <form action="/signup">
-        <input type="hidden" id="address" name="address" value="{{address}}">
-        <button type="submit" class="btn btn-dark">Signup</button>
-      </form>
+    {% endfor %}
+  </div>
 </div>
+
+<p>Signup and keep track of your representatiives</p>
+<form action="/signup">
+  <input type="hidden" id="address" name="address" value="{{address}}">
+  <button type="submit" class="btn btn-dark">Signup</button>
+</form>
 
 
 {% endblock %}

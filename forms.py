@@ -38,7 +38,7 @@ class EditUserForm(FlaskForm):
 
 class EditInteractionForm(FlaskForm):
 
-    interaction_date = DateField('When did you interact with your representative?', format='%m-%d-%Y')
+    interaction_date = DateField('When did you interact with your representative?')
     comm_choices = [('telephone', 'telephone'), ('email', 'email'), ('mail', 'traditional mail'), ('in-person', 'in-person'), ('telegram', 'telegram')]
     medium = SelectField('How did you contact your representative?', choices=comm_choices)
     topic = StringField('What was the topic of your interaction?', validators=[InputRequired(message="Please enter the topic of your interaction")])

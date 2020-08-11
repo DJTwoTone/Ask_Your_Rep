@@ -22,6 +22,7 @@
     - links to recordings and pictures
     - eagle scream?
     - state mottos?
+    - state information??
 
 
 # PONDERS
