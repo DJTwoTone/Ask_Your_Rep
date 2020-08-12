@@ -6,24 +6,25 @@
 
 {% for interaction in user.interactions %}
 
-
-<div class="card">
-    <div class="card-header">
-      Interaction with:
-      {{interaction.user.first_name}} {{interaction.user.last_name}}
-      and
-      {{interaction.representative.full_name}}
-    </div>
-    <div class="card-body">
+<div class="container">
+  <div class="row d-flex justify-content-around">
+    <div class="card">
+      <div class="card-header">
+        Interaction with:
+        {{interaction.user.first_name}} {{interaction.user.last_name}}
+        and
+        {{interaction.representative.full_name}}
+      </div>
+      <div class="card-body">
         <h5 class="card-title">{{interaction.topic}}</h5>
-        <p class="card-text"><small class="text-muted">{{interaction.interaction_date}}</small></p>
+        <p class="card-text"><small class="text-muted">{{interaction.interaction_date.strftime('%m / %d / %Y')}}</small></p>
         <p class="card-text">{{interaction.content}}</p>
         <p class="card-text"><small class="text-muted">via: {{interaction.medium}}</small></p>
+      </div>
+      <a href="/user/interaction/{{interaction.id}}/edit" class="btn btn-primary">Edit This Interaction</a>
     </div>
-    <a href="/user/interaction/{{interaction.id}}/edit" class="btn btn-primary">Edit This Interaction</a>
+  </div>
 </div>
-
-
 {% endfor %}
 
 {% endblock %}

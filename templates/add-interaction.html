@@ -5,26 +5,31 @@
 {% block content %}
 
 <h1>Add an Interaction</h1>
-
-<form method="POST">
-
-    {{ form.hidden_tag() }}
-    
-    {% for field in form 
-        if field.widget.input_type != 'hidden' %}
-            <p>
-                {{ field.label }}
-                {{ field(class_="form-control") }}
+<div class="container">
 
 
-            </p>
-
-            {% for error in field.errors %}
+    <form method="POST">
+        <div class="form-group">
+          
+            {{ form.hidden_tag() }}
+            
+            {% for field in form 
+                if field.widget.input_type != 'hidden' %}
+                <p>
+                    {{ field.label }}
+                    {{ field(class_="form-control") }}
+                    
+                    
+                </p>
+                
+                {% for error in field.errors %}
                 {{ error }}
-            {% endfor %}
-
-    {% endfor %}
-        <button type="submit" class="btn btn-primary">Add Interaction</button>
-</form>
-
-{% endblock %}
+                {% endfor %}
+                
+                {% endfor %}
+                <button type="submit" class="btn btn-primary">Add Interaction</button>
+                </div>
+            </form>
+        </div>
+        
+        {% endblock %}

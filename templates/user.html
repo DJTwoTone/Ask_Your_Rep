@@ -11,7 +11,7 @@
 <div class="container">
   <div class="row d-flex justify-content-around">
 
-    {% for rep in reps %}
+    {% for rep in user.representatives %}
       <div class="card " style="width: 75%;">
         <div class="row">
           <div class="col-3">
@@ -22,7 +22,7 @@
               <h3 class="card-title display-3">{{rep.full_name}}</h3>
             </div>
               <p class="text-muted text-right">{{rep.party}}</p>
-              <p class="h3 card-text">{{rep.state |upper}} State - {{rep.chamber |capitalize}} House - District {{rep.district}}</p>
+              <p class="h3 card-text">{{rep.district.state |upper}} State - {{rep.district.house |capitalize}} House - District {{rep.district.district_num}}</p>
               
             {% if rep.email %}
               <p class="card-text">{{rep.first_name}} can be reached at <a href="mailto:{{rep.email}}"> {{rep.email}} </a></p>
@@ -49,6 +49,10 @@
           </div>                 
           {% endfor %}
         </div>
+        <form action="/user/interactions/add">
+          <input type="hidden" id="repId" name="repId" value={{rep.id}}>
+          <button type="submit">Interact with this Representative</button>
+        </form>
       </div>
     {% endfor %}
   </div>
