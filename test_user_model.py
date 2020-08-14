@@ -5,7 +5,8 @@
 #     py -m unittest test_user_model.py
 
 import os
-from unittest import TestCase
+from betamax.fixtures import unittest
+# from unittest import TestCase
 
 from models import db
 
@@ -19,8 +20,20 @@ from app import app
 
 db.create_all()
 
-class UserModelTestCase(TestCase):
+class UserModelTestCase(unittest.BetamaxTestCase):
     """Tests the User model"""
 
     def setUp(self):
-        """"""
+        """start with a clean slate"""
+
+        db.drop_all()
+        db.create_all()
+
+    def tearDown(self):
+        """ clean it all up after testing"""
+        resp = super().tearDown()
+        db.session.rollback()
+        
+        return resp
+
+    

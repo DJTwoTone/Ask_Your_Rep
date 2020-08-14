@@ -7,19 +7,20 @@
 
 {% block content %}
 
-<div class="d-flex align-items-center">
+<div class="d-flex align-items-center min-vh-100">
   <div class="container">
     <div class="row justify-content-center">
       <form id="geoform" action="/your-reps">
         <div class="form-group">
-          <input type="search" id="search-input" class="form-control-lg" name="search-input" placeholder="What's your address?" />
-          <button type="submit">Find Your Reps</button>
-  
+          <!-- <div class="justify-content-center"> -->
+            <input type="search" id="search-input" class="form-control-lg" name="search-input" placeholder="What's your address?" />
+            <button type="submit" class="btn btn-primary m-3">Find Your Reps</button>
+
+          <!-- </div> -->
+        </div>
+      </form>
     </div>
   </div>
-    </div>
-
 </div>
-</form>
 
 {% endblock %}

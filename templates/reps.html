@@ -11,15 +11,14 @@
   <div class="row d-flex justify-content-around">
 
     {% for rep in reps %}
-      <div class="card " style="width: 75%;">
+      <div class="card m-3 shadow p-3 mb-5 bg-white rounded" style="width: 75%;">
         <div class="row">
-          <div class="col-3">
-            <img src="{{rep.photo_url}}" class="img-thumbnail rounded-circle" alt="{{rep.full_name}}">
+          <div class="col-2">
+            <img src="{{rep.photo_url}}" class="img-thumbnail rounded-circle shadow" alt="{{rep.full_name}}">
           </div>
-          <div class="col-9">
+          <div class="col-10">
             <div class="card-body">
-              <h3 class="card-title display-3">{{rep.full_name}}</h3>
-            </div>
+              <h3 class="card-title display-4">{{rep.full_name}}</h3>
               <p class="text-muted text-right">{{rep.party}}</p>
               <p class="h3 card-text">{{rep.state |upper}} State - {{rep.chamber |capitalize}} House - District {{rep.district}}</p>
               
@@ -30,21 +29,30 @@
             {% endif %}
               
             {% if rep.website %}
-              <p class="card-text">{{rep.first_name}}'s website can be found at <a href="{{rep.website}}">{{rep.website}}</a></p>
+              <p class="card-text">{{rep.first_name}}'s website can be found at <a href="{{rep.sources[0].url}}">{{rep.website}}</a></p>
             {% else %}
               <p class="card-text">{{rep.first_name}} doesn't seem to have a registered website. You may want to contact them personally.</p>
             {% endif %}
+            </div>
 
           </div>
         </div>
         <div class="row d-flex justify-content-around">
 
           {% for office in rep.offices %}
-          <div class="col-{{12/rep.offices|length}} m-1">
+          <div class="col-{{12/rep.offices|length}} m-2">
             <p class="h4">{{office.name}}</p>
-            <p class="card-text">Phone number: <a href="tel:{{office.phone}}">Call {{office.phone}}</a>
+            {% if office.phone %}
+            <p class="card-text">Phone number: <a href="tel:{{office.phone}}">Call {{office.phone}}</a></p>
+            {% else %}
+            <p class="card-text">Phone number: No phone number listed for this office.</p>
+            {% endif %}
+            {% if office.address %}
             <p class="card-text">Address: {{office.address}}</p>
-            </p>
+            {% else %}
+            <p class="card-text">Address: No address listed for this office</p>
+            {% endif %}
+            
           </div>                 
           {% endfor %}
         </div>
