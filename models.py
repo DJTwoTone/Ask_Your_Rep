@@ -83,7 +83,7 @@ class Representative(db.Model):
     photo_url = db.Column(db.String)
     email = db.Column(db.String)
     serving = db.Column(db.Boolean, nullable=False)
-    website = db.Column(db.String)
+    websites = db.Column(db.JSON)
     party = db.Column(db.String)
 
     @classmethod
@@ -138,9 +138,9 @@ class Representative(db.Model):
             house = rep.get('chamber')
             sources = rep.get('sources')
             if sources == []:
-                website = 'None'
+                websites = 'None'
             else:
-                website = sources[0]['url']
+                websites = sources
             party = rep.get('party')
             offices = rep.get('offices')
 

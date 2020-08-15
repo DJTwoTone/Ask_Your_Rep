@@ -30,8 +30,13 @@
               <p class="card-text">{{rep.first_name}} doesn't seem to have a registered email address. You may want to contact them personally.</p>
             {% endif %}
               
-            {% if rep.website %}
-              <p class="card-text">{{rep.first_name}}'s website can be found at <a href="{{rep.website}}">{{rep.website}}</a></p>
+            {% if rep.websites %}
+              <p class="card-text">{{rep.first_name}}'s website(s) can be found at:
+                <ul>
+                  {% for site in rep.websites %}
+                    <li><a href="{{site.url}}">{{site.url}}</a></li>
+                  {% endfor %}
+                </ul>
             {% else %}
               <p class="card-text">{{rep.first_name}} doesn't seem to have a registered website. You may want to contact them personally.</p>
             {% endif %}

@@ -21,7 +21,14 @@ db.session.commit()
 office = Office.query.get(1)
 district = District.query.get(1)
 
-test_rep = Representative(first_name='Testy', last_name='McTestface', full_name='Testy McTestface', photo_url='https://mn315.net/wp-content/uploads/2018/06/cropped-Ugandan-Knuckles.jpg', email='test@test.test', serving=True, district=district, website='www.google.com')
+test_rep = Representative(first_name='Testy', last_name='McTestface', full_name='Testy McTestface', photo_url='https://mn315.net/wp-content/uploads/2018/06/cropped-Ugandan-Knuckles.jpg', email='test@test.test', serving=True, district=district, websites=[
+            {
+                "url": "http://www.google.com"
+            },
+            {
+                "url": "http://tesla.com"
+            }
+        ])
 test_user = User.register(username='Someuser', password='1234567890', first_name='Some', last_name='User', email='some@user.com', address='123 Any St., Anytown NY 12345')
 login_test = User.register(username='test', password='1234', first_name='test', last_name='test', email='test@test.com', address='82 Kent Blvd., Salamanca NY 14779')
 db.session.add(test_rep)

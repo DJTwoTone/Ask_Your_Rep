@@ -163,7 +163,7 @@ def signup():
 
     # import pdb
     # pdb.set_trace()
-    if request.args != []:
+    if request:
         address = request.args['address']
     else:
         address = ''

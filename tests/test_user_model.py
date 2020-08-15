@@ -5,8 +5,12 @@
 #     py -m unittest test_user_model.py
 
 import os
-from betamax.fixtures import unittest
-# from unittest import TestCase
+from betamax import Betamax
+import requests
+from unittest import TestCase
+
+with Betamax.configure() as config:
+    config.cassette_library_dir = 'tests/fixtures/cassettes'
 
 from models import db
 
@@ -20,7 +24,7 @@ from app import app
 
 db.create_all()
 
-class UserModelTestCase(unittest.BetamaxTestCase):
+class UserModelTestCase():
     """Tests the User model"""
 
     def setUp(self):

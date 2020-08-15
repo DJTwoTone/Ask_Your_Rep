@@ -28,8 +28,13 @@
               <p class="card-text">{{rep.first_name}} doesn't seem to have a registered email address. You may want to contact them personally.</p>
             {% endif %}
               
-            {% if rep.website %}
-              <p class="card-text">{{rep.first_name}}'s website can be found at <a href="{{rep.sources[0].url}}">{{rep.website}}</a></p>
+            {% if rep.sources[0] %}
+              <p class="card-text">{{rep.first_name}}'s website(s) can be found at:
+                <ul>
+                  {% for source in rep.sources %}
+                    <li><a href="{{source.url}}">{{source.url}}</a></li>
+                  {% endfor %}
+                </ul>
             {% else %}
               <p class="card-text">{{rep.first_name}} doesn't seem to have a registered website. You may want to contact them personally.</p>
             {% endif %}
@@ -43,7 +48,7 @@
           <div class="col-{{12/rep.offices|length}} m-2">
             <p class="h4">{{office.name}}</p>
             {% if office.phone %}
-            <p class="card-text">Phone number: <a href="tel:{{office.phone}}">Call {{office.phone}}</a></p>
+            <p class="card-text">Phone number: <a href="tel:{{office.phone}}"> {{office.phone}}</a></p>
             {% else %}
             <p class="card-text">Phone number: No phone number listed for this office.</p>
             {% endif %}
