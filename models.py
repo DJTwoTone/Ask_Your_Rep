@@ -1,5 +1,6 @@
 """Models of Ask Your Rep app"""
-
+# import pdb
+# pdb.set_trace()
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from datetime import datetime
@@ -88,8 +89,6 @@ class Representative(db.Model):
 
     @classmethod
     def check_rep(cls, full_name, state, district_num, house, serving):
-        # import pdb
-        # pdb.set_trace()
 
         reps = cls.query.filter(cls.full_name == full_name, 
                                     cls.serving == serving).join(District).all()
@@ -99,9 +98,8 @@ class Representative(db.Model):
                 return rep
         
         return []
-
     
-    def find_reps(address):
+    def find_latlng(address):
         geodata = requests.get('http://www.mapquestapi.com/geocoding/v1/address', 
                             params={
                                 'key': mapQKey,
@@ -110,8 +108,9 @@ class Representative(db.Model):
 
         jdata = geodata.json()
         latLng = jdata['results'][0]['locations'][0]['latLng']
-        lat = latLng['lat']
-        lng = latLng['lng']
+        return latLng
+        
+    def find_reps(lat, lng):
 
         repsResp = requests.get('http://www.openstates.org/api/v1/legislators/geo',
                         params={
@@ -120,8 +119,6 @@ class Representative(db.Model):
                             'long': lng
                         })
         return repsResp.json()
-
-
 
     #this needs to be broken down some
     @classmethod
@@ -152,8 +149,6 @@ class Representative(db.Model):
                 else:
                     dist = District.check_district(state=state, district_num=district_num, house=house)
                 
-                # import pdb
-                # pdb.set_trace()
                 r = cls(first_name=first_name,
                                     last_name=last_name,
                                     full_name=full_name,
@@ -161,18 +156,14 @@ class Representative(db.Model):
                                     photo_url=photo_url,
                                     email=email,
                                     serving=serving,
-                                    website=website,
+                                    websites=websites,
                                     party=party
                                     )
-
-                # import pdb
-                # pdb.set_trace()        
+      
                 db.session.add(r)
                 db.session.commit()
 
                 for office in offices:
-                    # import pdb
-                    # pdb.set_trace()
 
                     o = Office.add_office(office)
 

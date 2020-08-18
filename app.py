@@ -64,8 +64,11 @@ def home():
 def your_reps():
 
     address = request.args['search-input']
+    latLng = Representative.find_latlng(address)
+    lat = latLng['lat']
+    lng = latLng['lng']
 
-    reps = Representative.find_reps(address)
+    reps = Representative.find_reps(lat, lng)
 
     if not reps:
         flash("No representatives found for the address. Please recheck your address")
@@ -128,7 +131,7 @@ def login():
         else:
             #refactor this to both
             form.username.errors = ["There's a problem with your username."]
-            form.passowrd.errors = ["There's a problem with your password."]
+            form.password.errors = ["There's a problem with your password."]
 
     return render_template('login.html', form=form)
 
@@ -147,7 +150,11 @@ def signup():
 
         user = User.register(username=username, password=password, email=email,
                             first_name=first_name, last_name=last_name, address=address)
-        reps = Representative.find_reps(address)
+        latLng = Representative.find_latlng(address)
+        lat = latLng['lat']
+        lng = latLng['lng']
+        
+        reps = Representative.find_reps(lat, lng)
 
         for rep in reps:
 
@@ -161,8 +168,6 @@ def signup():
         flash("Welcome")
         return redirect("/")
 
-    # import pdb
-    # pdb.set_trace()
     if request:
         address = request.args['address']
     else:
