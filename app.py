@@ -245,17 +245,15 @@ def edit_interaction(interaction_id):
         flash("Interaction successfully edited")
         return redirect('/user/interactions')
 
-    # form.interaction_date.value = f"{interaction.interaction_date.year}-{interaction.interaction_date.month}-{interaction.interaction_date.day}"
-    # form.process()
-
     return render_template('edit-interaction.html', form=form, user=g.user, interaction=interaction)
 
+@app.route("/reps/<rep_id>/interactions")
+def rep_interactions(rep_id):
 
-#I'm not sure I want to do this
-# @app.route("/user/interaction/delete")
-# def del_interaction():
+    rep = Representative.query.get_or_404(rep_id)
 
-#     return
+    return render_template('rep-interactions.html', rep=rep)
+
 
 @app.route("/logout")
 def logout():

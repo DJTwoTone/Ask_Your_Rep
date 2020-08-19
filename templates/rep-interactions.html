@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %} Your Representative's Interactions {% endblock %}
+
+{% block content %}
+
+{% for interaction in rep.interactions%}
+
+<div class="container">
+    <div class="row d-flex justify-content-around">
+      <div class="card">
+        <div class="card-header">
+          Interaction with {{interaction.representative.full_name}}
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{interaction.topic}}</h5>
+          <p class="card-text"><small class="text-muted">{{interaction.interaction_date.strftime('%m / %d / %Y')}}</small></p>
+          <p class="card-text">{{interaction.content}}</p>
+          <p class="card-text"><small class="text-muted">via: {{interaction.medium}}</small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  
+  {% endblock %}

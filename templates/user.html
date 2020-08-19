@@ -33,7 +33,7 @@
               <p class="card-text">{{rep.first_name}}'s website(s) can be found at:
                 <ul>
                   {% for website in rep.websites %}
-                    <li><a href="{{website.url}}">{{website.url}}</a></li>
+                    <li><a href="{{website.url}}" target="_blank">{{website.url}}</a></li>
                   {% endfor %}
                 </ul>
             {% else %}
@@ -62,12 +62,16 @@
           </div>                 
           {% endfor %}
         </div>
-        <form action="/user/interactions/add">
-          <input type="hidden" id="repId" name="repId" value={{rep.id}}>
-          <button type="submit" class="btn btn-primary">Interact with this Representative</button>
-        </form>
+        <div class="row justify-content-between">
+          <form action="/user/interactions/add" class="col-3">
+            <input type="hidden" id="repId" name="repId" value={{rep.id}}>
+            <button type="submit" class="btn btn-primary">Interact with this Representative</button>
+          </form>
+          <a href="/reps/{{rep.id}}/interactions" class="btn btn-secondary float-right col-3">See this representative's interactions</a>
+
+        </div>
       </div>
-    {% endfor %}
+      {% endfor %}
   </div>
 </div>
   

@@ -32,7 +32,7 @@
               <p class="card-text">{{rep.first_name}}'s website(s) can be found at:
                 <ul>
                   {% for source in rep.sources %}
-                    <li><a href="{{source.url}}">{{source.url}}</a></li>
+                    <li><a href="{{source.url}}" target="_blank">{{source.url}}</a></li>
                   {% endfor %}
                 </ul>
             {% else %}
