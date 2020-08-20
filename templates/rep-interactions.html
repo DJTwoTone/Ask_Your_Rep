@@ -4,11 +4,17 @@
 
 {% block content %}
 
+{% if not rep.interactions %}
+
+  <h2>No one has interacted with this representative yet.</h2>
+
+{% else %}
+
+<div class="container-fluid">
+  <div class="row d-flex justify-content-around">
 {% for interaction in rep.interactions%}
 
-<div class="container">
-    <div class="row d-flex justify-content-around">
-      <div class="card">
+      <div class="card m-3 shadow">
         <div class="card-header">
           Interaction with {{interaction.representative.full_name}}
         </div>
@@ -19,8 +25,10 @@
           <p class="card-text"><small class="text-muted">via: {{interaction.medium}}</small></p>
         </div>
       </div>
+      {% endfor %}
     </div>
   </div>
-  {% endfor %}
-  
+
+  {% endif %}
+
   {% endblock %}
