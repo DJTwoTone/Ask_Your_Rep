@@ -6,24 +6,23 @@
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
     {% block head_addons %} {% endblock %}
 </head>
 <body>
 
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <a class="navbar-brand" href="/">Ask Your Rep</a>
+    <ul class="navbar-nav ml-md-auto">
   {% if 'curr_user' not in session %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-        <a class="navbar-brand" href="/">Ask Your Rep</a>
-        <ul class="navbar-nav">
             <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
             {% if address %}
             <li class="nav-item"><a class="nav-link" href="/signup?address={{address}}">Signup</a></li>
             {% else %}
-            <li class="nav-item"><a class="nav-link" href="/signup?address=''">Signup</a></li>
+            <li class="nav-item"><a class="nav-link" href="/signup">Signup</a></li>
             {% endif %}
   {% else %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-        <a class="navbar-brand" href="/user">Ask Your Rep</a>
-        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="/user/edit"><i class="fas fa-id-card 3x"></i>  {{user.username}}</a></li>
             <li class="nav-item"><a class="nav-link" href="/user/interactions">My Interactions</a></li>
             <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
   {% endif %}
@@ -31,7 +30,10 @@
       </nav>
 
     {% for msg in get_flashed_messages() %}
-      <p>{{msg}}</p>
+
+      <div class="d-flex justify-content-center">
+        <h2>{{msg}}</h2>
+      </div>
     {% endfor %}
     {% block content %}
     {% endblock %}    

@@ -168,15 +168,18 @@ def signup():
         flash("Welcome")
         return redirect("/")
 
-    if request:
+    if request.args:
         address = request.args['address']
-    else:
-        address = ''
-    form.address.data = address
+        form.address.data = address
+        form.address.id = "search-input"
+        form.address.type = "search"
+        
+        return render_template('signup.html', form=form, address=address)
+
     form.address.id = "search-input"
     form.address.type = "search"
 
-    return render_template('signup.html', form=form, address=address)
+    return render_template('signup.html', form=form)
 
 @app.route("/user/interactions")
 def interactions():

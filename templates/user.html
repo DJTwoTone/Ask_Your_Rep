@@ -15,13 +15,19 @@
       <div class="card m-3 shadow p-3 mb-5 bg-white rounded" style="width: 75%;">
         <div class="row">
           <div class="col-2">
+            {% if not rep.photo_url %}
+            <img src="/static/img/no-image-icon.png" class="img-thumbnail rounded-circle shadow" alt="{{rep.full_name}}">
+            {% else %}
             <img src="{{rep.photo_url}}" class="img-thumbnail rounded-circle shadow" alt="{{rep.full_name}}">
+            {% endif %}
           </div>
           <div class="col-10">
             <div class="card-body">
-              <h3 class="card-title display-4">{{rep.full_name}}</h3>
-              <p class="text-muted text-right">{{rep.party}}</p>
-              <p class="h3 card-text">{{rep.district.state |upper}} State - {{rep.district.chamber |capitalize}} House - District {{rep.district.district_num}}</p>
+              <div class="row d-flex justify-content-between align-items-baseline">
+                <h3 class="card-title display-4">{{rep.full_name}}</h3><p class="text-muted text-right ">{{rep.party}}</p>
+              </div>
+              <hr/>
+              <p class="h3 card-text">{{rep.district.state |upper}} State - {{rep.district.house |capitalize}} House - District {{rep.district.district_num}}</p>
               
             {% if rep.email %}
               <p class="card-text">{{rep.first_name}} can be reached at <a href="mailto:{{rep.email}}"> {{rep.email}} </a></p>
@@ -43,7 +49,8 @@
 
           </div>
         </div>
-        <div class="row d-flex justify-content-around">
+        <hr/>
+        <div class="row d-flex justify-content-between">
 
           {% for office in rep.offices %}
           <div class="col-{{12/rep.offices|length}} m-2">
@@ -56,7 +63,7 @@
             {% if office.address %}
             <p class="card-text">Address: {{office.address}}</p>
             {% else %}
-            <p class="card-text">Address: No address listed for this office</p>
+            <p class="card-text text-wrap">Address: No address listed for this office</p>
             {% endif %}
             
           </div>                 
