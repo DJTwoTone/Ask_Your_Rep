@@ -5,14 +5,14 @@
 #     py -m unittest test_user_model.py
 
 import os
-from betamax import Betamax
+# from betamax import Betamax
 import requests
 from unittest import TestCase
 
-with Betamax.configure() as config:
-    config.cassette_library_dir = 'tests/fixtures/cassettes'
+# with Betamax.configure() as config:
+#     config.cassette_library_dir = 'tests/fixtures/cassettes'
 
-from models import db
+from models import db, User
 
 # connect to the test database
 
@@ -24,7 +24,7 @@ from app import app
 
 db.create_all()
 
-class UserModelTestCase():
+class UserModelTestCase(TestCase):
     """Tests the User model"""
 
     def setUp(self):
@@ -40,4 +40,16 @@ class UserModelTestCase():
         
         return resp
 
-    
+    def test_user_add(self):
+        User.register('testuser', '12345', 'test_f_name', 'test_l_name', 'test@test.com', '1313 Mockingbird Ln.')
+
+        testuser = User.query.get(1)
+        self.assertIsNotNone(testuser)
+        self.assertEqual(testuser.username, 'testuser')
+        self.assertEqual(testuser.first_name, 'test_f_name')
+        self.assertEqual(testuser.last_name, 'test_l_name')
+        self.assertEqual(testuser.email, 'test@test.com')
+        self.assertEqual(testuser.address, '1313 Mockingbird Ln.')
+
+    def test_authentication(self):
+        

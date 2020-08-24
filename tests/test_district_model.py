@@ -10,13 +10,11 @@ from sqlalchemy import exc
 from models import db, District
 
 # connect to the test database
-
 os.environ['DATABASE_URL'] = "postgresql:///ask_your_rep_test"
 
 from app import app
 
 # create the tables for the test
-
 db.create_all()
 
 
@@ -59,9 +57,9 @@ class DistrictModelTestCase(TestCase):
             District.add_district(None, '01', 'lower')
 
     def test_district_add_dist_num_error(self):
-        #This shouldn't work
+        # This shouldn't work
         # with self.assertRaises(TypeError):
-            # District.add_district('ny', 1, 'lower')
+        #     District.add_district('ny', 1, 'lower')
         with self.assertRaises(exc.IntegrityError):
             District.add_district('ny', None, 'lower')
 

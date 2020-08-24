@@ -189,7 +189,7 @@ def interactions():
 @app.route("/user/interactions/add", methods=["GET", "POST"])
 def add_interaction():
 
-    print('start the render')
+    # print('start the render')
     form = InteractionForm()
     reps = [(rep.id, rep.full_name) for rep in g.user.representatives]
     repid = request.args['repId']
