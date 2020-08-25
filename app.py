@@ -64,11 +64,11 @@ def home():
 def your_reps():
 
     address = request.args['search-input']
-    latLng = Representative.find_latlng(address)
-    lat = latLng['lat']
-    lng = latLng['lng']
+    # latLng = Representative.find_latlng(address)
+    # lat = latLng['lat']
+    # lng = latLng['lng']
 
-    reps = Representative.find_reps(lat, lng)
+    reps = Representative.find_reps(address)
 
     if not reps:
         flash("No representatives found for the address. Please recheck your address")

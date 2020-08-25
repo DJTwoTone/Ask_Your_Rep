@@ -110,7 +110,11 @@ class Representative(db.Model):
         latLng = jdata['results'][0]['locations'][0]['latLng']
         return latLng
         
-    def find_reps(lat, lng):
+    def find_reps(self, address):
+
+        latLng = self.find_latlng(address)
+        lat = latLng['lat']
+        lng = latLng['lng']
 
         repsResp = requests.get('http://www.openstates.org/api/v1/legislators/geo',
                         params={
