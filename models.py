@@ -221,7 +221,7 @@ class User(db.Model):
         """Authenticates the username and password"""
 
         user = User.query.filter_by(username=username).first()
-
+        print(user)
         if user and bcrypt.check_password_hash(user.password, password):
             return user
         else:

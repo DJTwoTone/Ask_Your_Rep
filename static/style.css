@@ -3,6 +3,8 @@ body, html {
 
     /* The image used */
     background-image: url("/static/img/dec_of_ind.jpg");
+    backdrop-filter: sepia(50%);
+    
   
     /* Full height */
     height: 100%;

@@ -3,10 +3,11 @@
 {% block title %} Ask Your Rep {% endblock %}
 
 {% block content %}
-
+<div class="bg-info">
 <h1>Showing representatives for:</h1>
 <h3>{{user.first_name}} {{user.last_name}}</h3>
 <p>{{user.address}}</p>
+</div>
 
 <div class="container">
   <div class="row d-flex justify-content-around">
@@ -81,6 +82,9 @@
       {% endfor %}
   </div>
 </div>
-  
-<a href="/user/edit" class="btn btn-primary">EDIT USER INFO</a>
+<div class='bg-secondary'>
+  <a href="/user/edit" class="btn btn-primary m-4">EDIT USER INFO</a>
+
+</div>
+
 {% endblock %}

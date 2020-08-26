@@ -3,10 +3,13 @@
 {% block title %} Add an Interaction {% endblock %}
 
 {% block content %}
-
-<h1>Add an Interaction</h1>
+<div class="bg-info">
+    <h1>Add an Interaction</h1>
+</div>
 <div class="container">
+    <div class="d-flex align-items-center justify-content-around min-vh-100">
 
+        <div class="m-3 shadow p-3 mb-5 bg-white rounded" style="width: 80%;">
 
     <form method="POST">
         <div class="form-group">
@@ -30,6 +33,8 @@
                 <button type="submit" class="btn btn-primary">Add Interaction</button>
                 </div>
             </form>
+            </div>
+            </div>
         </div>
         
         {% endblock %}

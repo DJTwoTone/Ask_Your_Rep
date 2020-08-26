@@ -82,11 +82,7 @@ def user_home():
         flash("Please sign up to access user functionality")
         return redirect('signup')
 
-    user = g.user
-    # import pdb
-    # pdb.set_trace()
-
-    return render_template('user.html', user=user)
+    return render_template('user.html', user=g.user)
 
 
 @app.route("/user/edit", methods=['GET', 'POST']) 
@@ -124,7 +120,7 @@ def login():
         username = form.username.data
         password = form.password.data
 
-        user = User.authenticate(username, password)
+        user = User.authenticate(username=username, password=password)
         if user:
             login_user(user)
             return redirect("/user")
@@ -219,9 +215,10 @@ def add_interaction():
 
         flash("Interaction sucessfully added")
         return redirect('/user/interactions')
+    
     form.process()
 
-    return render_template('add-interaction.html', form=form)
+    return render_template('add-interaction.html', form=form, user=g.user)
 
 @app.route("/user/interaction/<interaction_id>/edit", methods=["GET", "POST"])
 def edit_interaction(interaction_id):
@@ -255,7 +252,7 @@ def rep_interactions(rep_id):
 
     rep = Representative.query.get_or_404(rep_id)
 
-    return render_template('rep-interactions.html', rep=rep)
+    return render_template('rep-interactions.html', rep=rep, user=g.user)
 
 
 @app.route("/logout")

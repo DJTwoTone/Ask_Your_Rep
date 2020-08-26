@@ -3,9 +3,10 @@
 {% block title %} Ask Your Rep {% endblock %}
 
 {% block content %}
-
-<h1>Showing representatives for:</h1>
-<p>{{address}}</p>
+<div class="bg-info">
+  <h1>Showing representatives for:</h1>
+  <p>{{address}}</p>
+</div>
 
 <div class="container">
   <div class="row d-flex justify-content-around">
@@ -72,12 +73,12 @@
     {% endfor %}
   </div>
 </div>
-
-<p>Signup and keep track of your representatiives</p>
+<div class="bg-secondary">
+<p class="text-light">Signup and keep track of your representatiives</p>
 <form action="/signup">
   <input type="hidden" id="address" name="address" value="{{address}}">
-  <button type="submit" class="btn btn-dark">Signup</button>
+  <button type="submit" class="btn btn-primary mb-5">Signup</button>
 </form>
-
+</div>
 
 {% endblock %}

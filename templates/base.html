@@ -29,13 +29,14 @@
   {% endif %}
         </ul>
       </nav>
-
+      <div class="bg-secondary">
     {% for msg in get_flashed_messages() %}
 
       <div class="d-flex justify-content-center">
-        <h2>{{msg}}</h2>
+        <h3 class="text-light">{{msg}}</h3>
       </div>
     {% endfor %}
+  </div>
     {% block content %}
     {% endblock %}    
 
