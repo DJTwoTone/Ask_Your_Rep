@@ -68,7 +68,7 @@ def your_reps():
     # lat = latLng['lat']
     # lng = latLng['lng']
 
-    reps = Representative.find_reps(address)
+    reps = Representative.find_reps(address=address)
 
     if not reps:
         flash("No representatives found for the address. Please recheck your address")
@@ -150,11 +150,11 @@ def signup():
 
         user = User.register(username=username, password=password, email=email,
                             first_name=first_name, last_name=last_name, address=address)
-        latLng = Representative.find_latlng(address)
-        lat = latLng['lat']
-        lng = latLng['lng']
+        # latLng = Representative.find_latlng(address)
+        # lat = latLng['lat']
+        # lng = latLng['lng']
         
-        reps = Representative.find_reps(lat, lng)
+        reps = Representative.find_reps(address)
 
         for rep in reps:
 

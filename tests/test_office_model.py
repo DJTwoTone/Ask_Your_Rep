@@ -1,14 +1,14 @@
 """Office model tests"""
 
 # to run tests:
-#     py -m unittest test_office_model.py
+#     py -m unittest tests/test_office_model.py
 
 import os
 from unittest import TestCase
 from sqlalchemy import exc
 
 from models import db, Office, Representative
-from tests.openstate_info_mock import single_office, error_office, single_rep
+from tests.openstate_info_mock import single_office, error_office, single_rep1
 
 #connect to the test databse
 os.environ['DATABASE_URL'] = "postgresql:///ask_your_rep_test"
@@ -35,7 +35,7 @@ class OfficeModelTestCase(TestCase):
         return resp
 
     def test_office_add(self):
-        rep = Representative.add_rep(single_rep)
+        rep = Representative.add_rep(single_rep1)
         db.session.commit()
         o = Office.add_office(single_office)
         rep.offices.append(o)

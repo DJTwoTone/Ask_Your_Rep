@@ -97,22 +97,22 @@ all_info = [
             }
         ],
         "offices": [
-            # {
-            #     "name": "Capitol Office",
-            #     "fax": "518-426-6905",
-            #     "phone": "518-455-3563",
-            #     "email": "borrello@nyassembly.gov",
-            #     "address": "188 State Street, Legislative Office Building; Room 706; Albany, NY 12247",
-            #     "type": "capitol"
-            # },
-            # {
-            #     "name": "District Office",
-            #     "fax": "716-664-2430",
-            #     "phone": "716-664-4603",
-            #     "email": None,
-            #     "address": "2-6 E. Second Street; Fenton Building, Suite 302; Jamestown, NY 14701",
-            #     "type": "district"
-            # }
+            {
+                "name": "Capitol Office",
+                "fax": "518-426-6905",
+                "phone": "518-455-3563",
+                "email": "borrello@nyassembly.gov",
+                "address": "188 State Street, Legislative Office Building; Room 706; Albany, NY 12247",
+                "type": "capitol"
+            },
+            {
+                "name": "District Office",
+                "fax": "716-664-2430",
+                "phone": "716-664-4603",
+                "email": None,
+                "address": "2-6 E. Second Street; Fenton Building, Suite 302; Jamestown, NY 14701",
+                "type": "district"
+            }
         ],
         "old_roles": {},
         "middle_name": "",
@@ -135,13 +135,13 @@ single_office = {
 error_office = {
                 "name": "District Office",
                 "fax": 7166642430,
-                "phone": "716-664-4603",
+                "phone": 7166644603,
                 "email": None,
                 "address": "2-6 E. Second Street; Fenton Building, Suite 302; Jamestown, NY 14701",
                 "type": "district"
                 }
 
-single_rep = {
+single_rep1 = {
         "id": "NYL000219",
         "leg_id": "NYL000219",
         "all_ids": [
@@ -202,6 +202,67 @@ single_rep = {
         "level": "state",
         "created_at": "2018-10-18 14:56:16",
         "updated_at": "2020-08-05 17:04:43"
+    }
+
+single_rep2 =     {
+        "id": "~not available~",
+        "leg_id": "~not available~",
+        "all_ids": [
+            "~not available~"
+        ],
+        "full_name": "George Borrello",
+        "first_name": "George",
+        "last_name": "Borrello",
+        "suffix": "",
+        "photo_url": "",
+        "url": "https://www.nysenate.gov/senators/george-m-borrello",
+        "email": "borrello@nyassembly.gov",
+        "party": "Republican",
+        "chamber": "upper",
+        "district": 57,
+        "state": "ny",
+        "sources": [
+            {
+                "url": "https://www.nysenate.gov/senators/george-m-borrello"
+            }
+        ],
+        "active": True,
+        "roles": [
+            {
+                "term": "2017-2018",
+                "district": 57,
+                "chamber": "upper",
+                "state": "ny",
+                "party": "Republican",
+                "type": "member",
+                "start_date": None,
+                "end_date": None
+            }
+        ],
+        "offices": [
+            {
+                "name": "Capitol Office",
+                "fax": "518-426-6905",
+                "phone": "518-455-3563",
+                "email": "borrello@nyassembly.gov",
+                "address": "188 State Street, Legislative Office Building; Room 706; Albany, NY 12247",
+                "type": "capitol"
+            },
+            {
+                "name": "District Office",
+                "fax": "716-664-2430",
+                "phone": "716-664-4603",
+                "email": None,
+                "address": "2-6 E. Second Street; Fenton Building, Suite 302; Jamestown, NY 14701",
+                "type": "district"
+            }
+        ],
+        "old_roles": {},
+        "middle_name": "",
+        "country": "us",
+        "level": "state",
+        "created_at": "2020-06-17 21:33:26",
+        "updated_at": "2020-08-05 17:04:54"
     }
 
 latLng = {

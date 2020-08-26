@@ -1,4 +1,32 @@
+body, html {
+    height: 100%;
 
+    /* The image used */
+    background-image: url("/static/img/dec_of_ind.jpg");
+  
+    /* Full height */
+    height: 100%;
+  
+    /* Center and scale the image nicely */
+    background-position: center;
+    /* background-repeat: no-repeat; */
+    background-size: cover;
+  }
+
+.card {
+    height: 100%!important;
+
+    /* The image used */
+    background-image: url("https://l.https://trianglify.io/p/w:1440!h:900!x:3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234!v:0.6!c:0.04!s:mknv4d!f:il!i:0.57?fbclid=IwAR0kQNlGbkOIHUahuekwzw8jKhgjIW1y_86MaFwwaL9Uprbbi-dHzN-T7EU.com/l.php?u=https%3A%2F%2Ftrianglify.io%2Fp%2Fw%3A1440!h%3A900!x%3A3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234!v%3A0.6!c%3A0.04!s%3Amknv4d!f%3Ail!i%3A0.57%3Ffbclid%3DIwAR0kQNlGbkOIHUahuekwzw8jKhgjIW1y_86MaFwwaL9Uprbbi-dHzN-T7EU&h=AT35c_F2Joym0AOb-drH24MxS_V5GYLrOyPqolNL9M4zbnWsHjWA68k-Mzr505-v0I-vvMJRNjS9sNxUti4X79mdx600RY295wFtdVZvcoaBMIR5xAraKrjKdBmeRmKRNxQ")!important;
+  
+    /* Full height */
+    height: 100%!important;
+  
+    /* Center and scale the image nicely */
+    background-position: center!important;
+    /* background-repeat: no-repeat; */
+    background-size: cover!important;
+  }
 
 .card-text {
     word-wrap: break-word;

@@ -110,9 +110,9 @@ class Representative(db.Model):
         latLng = jdata['results'][0]['locations'][0]['latLng']
         return latLng
         
-    def find_reps(self, address):
+    def find_reps(address):
 
-        latLng = self.find_latlng(address)
+        latLng = Representative.find_latlng(address)
         lat = latLng['lat']
         lng = latLng['lng']
 
@@ -130,7 +130,7 @@ class Representative(db.Model):
             full_name = rep.get('full_name')
             first_name=rep.get('first_name')
             last_name=rep.get('last_name')
-            full_name=rep.get('full_name')
+            # full_name=rep.get('full_name')
             photo_url=rep.get('photo_url')
             email=rep.get('email')
             serving=rep.get('active')

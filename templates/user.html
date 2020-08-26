@@ -54,7 +54,7 @@
 
           {% for office in rep.offices %}
           <div class="col-{{12/rep.offices|length}} m-2">
-            <p class="h4">{{office.name}}</p>
+            <p class="h4">{{office.location}}</p>
             {% if office.phone %}
             <p class="card-text">Phone number: <a href="tel:{{office.phone}}"> {{office.phone}}</a></p>
             {% else %}

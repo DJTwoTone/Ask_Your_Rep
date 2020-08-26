@@ -2,7 +2,7 @@
 
 # to run tests:
 
-#     py -m unittest test_user_model.py
+#     py -m unittest tests/test_user_model.py
 
 import os
 # import requests
