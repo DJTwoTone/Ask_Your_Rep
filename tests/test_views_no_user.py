@@ -1,7 +1,7 @@
-"""Test views"""
+"""Test views with no user"""
 
 # to run test:
-#     FLASK_ENV=production py -m unittest tests/test_views.py
+#     FLASK_ENV=production py -m unittest tests/test_views_no_user.py
 
 # import os
 from unittest import TestCase, mock
@@ -32,7 +32,7 @@ class ViewsTestCaseNoUser(TestCase):
         db.drop_all()
         db.create_all()
     
-    def testDown(self):
+    def tearDown(self):
 
         resp = super().tearDown()
         db.session.rollback()
@@ -126,17 +126,4 @@ class ViewsTestCaseNoUser(TestCase):
             self.assertNotIn('My Interactions', html)
             self.assertNotIn('Logout', html)
 
-class ViewsTestCasewithUser(TestCase):
 
-    def setUp(self):
-        """Make sure we start with a clean slate"""
-
-        db.drop_all()
-        db.create_all()
-    
-    def testDown(self):
-
-        resp = super().tearDown()
-        db.session.rollback()
-
-        return resp
