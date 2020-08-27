@@ -3,8 +3,15 @@
 {% block title %} Ask Your Rep {% endblock %}
 
 {% block content %}
+<div class="bg-info">
+    <p>Editing information for {{user.username}}</p>
+</div>
 
-<p>Editing information for {{user.username}}</p>
+<div class="container">
+    <div class="d-flex align-items-center justify-content-around min-vh-100">
+  
+      <div class="m-3 shadow p-3 mb-5 bg-white rounded" style="width: 50%;">
+        
 
 <form method="POST">
 
@@ -24,5 +31,9 @@
     <button type="submit">Change Your Info</button>
 
 </form>
+
+      </div>
+    </div>
+</div>
 
 {% endblock %}

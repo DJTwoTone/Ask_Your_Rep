@@ -64,9 +64,6 @@ def home():
 def your_reps():
 
     address = request.args['search-input']
-    # latLng = Representative.find_latlng(address)
-    # lat = latLng['lat']
-    # lng = latLng['lng']
 
     reps = Representative.find_reps(address=address)
 
@@ -80,13 +77,17 @@ def user_home():
 
     if not g.user:
         flash("Please sign up to access user functionality")
-        return redirect('signup')
+        return redirect('/signup')
 
     return render_template('user.html', user=g.user)
 
 
 @app.route("/user/edit", methods=['GET', 'POST']) 
 def edit_user():
+
+    if not g.user:
+        flash("Please sign up to access user functionality")
+        return redirect('/signup')
 
     form = EditUserForm(obj=g.user)
     form.address.id = "search-input"
@@ -180,19 +181,24 @@ def signup():
 @app.route("/user/interactions")
 def interactions():
 
+    if not g.user:
+        flash("Please sign up to access user functionality")
+        return redirect('/signup')
+
     return render_template('interactions.html', user=g.user)
 
 @app.route("/user/interactions/add", methods=["GET", "POST"])
 def add_interaction():
 
-    # print('start the render')
+    if not g.user:
+        flash("Please sign up to access user functionality")
+        return redirect('/signup')
+
     form = InteractionForm()
     reps = [(rep.id, rep.full_name) for rep in g.user.representatives]
     repid = request.args['repId']
     form.representative.choices = reps
     form.representative.default = repid
-    # import pdb
-    # pdb.set_trace()
  
     if form.validate_on_submit():
 
@@ -223,6 +229,10 @@ def add_interaction():
 @app.route("/user/interaction/<interaction_id>/edit", methods=["GET", "POST"])
 def edit_interaction(interaction_id):
 
+    if not g.user:
+        flash("Please sign up to access user functionality")
+        return redirect('/signup')
+    
     interaction = Interaction.query.get_or_404(interaction_id)
 
     # import pdb

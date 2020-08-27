@@ -4,7 +4,15 @@
 
 {% block content %}
 
-<p>Editing interaction between {{user.first_name}} {{user.last_name}} and {{interaction.representative.full_name}}</p>
+<div class="bg-info">
+    <p>Editing interaction between {{user.first_name}} {{user.last_name}} and {{interaction.representative.full_name}}</p>
+</div>
+
+<div class="container">
+    <div class="d-flex align-items-center justify-content-around min-vh-100">
+  
+      <div class="m-3 shadow p-3 mb-5 bg-white rounded" style="width: 50%;">
+        
 
 <form method="POST">
 
@@ -24,5 +32,9 @@
     <button type="submit">Change Your Interaction</button>
 
 </form>
+
+      </div>
+    </div>
+</div>
 
 {% endblock %}
