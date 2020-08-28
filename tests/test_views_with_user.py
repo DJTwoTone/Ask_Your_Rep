@@ -5,14 +5,14 @@
 
 # import os
 from unittest import TestCase, mock
-from flask import Flask
+from flask import Flask, session
 
 from models import db, User, District, UserRepresentative, Representative, Office, Interaction
 from tests.openstate_info_mock import latLng, all_info
 
 # os.environ['DATABASE_URL'] = "postgresql:///ask_your_rep_test"
 
-from app import app, login_user
+from app import app, login_user, CURR_USER_KEY
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///ask_your_rep_test'
 app.config['SQLALCHEMY_ECHO'] = False
@@ -94,22 +94,72 @@ class ViewsTestCasewithUser(TestCase):
 
     #need to get session to work
 
-    # def test_home(self):
-    #     with app.test_client() as client:
-    #         # with client.session_transaction() as sess:
-    #         #     sess['CURR_USER_KEY'] = self.user.id
-            
-    #         print(self.user)
-    #         # print(sess['CURR_USER_KEY'])
+    def test_home(self):
+        with app.test_client() as client:
+            with client.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user.id
 
-    #         resp = client.get("/", follow_redirects=True)
-    #         assert Flask.session['CURR_USER_KEY'] == self.user.id
-    #         html = resp.get_data(as_text=True)
+            resp = client.get("/", follow_redirects=True)
+            assert sess[CURR_USER_KEY] == self.user.id
+            html = resp.get_data(as_text=True)
 
-    #         self.assertEqual(resp.status_code, 200)
-    #         self.assertNotIn('Login', html)
-    #         self.assertNotIn('Signup', html)
-    #         self.assertIn('My Interactions', html)
-    #         self.assertIn('Logout', html)
-    #         self.assertIn('Someuser', html)
-    #         self.assertIn('Testy McTestface', html)
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotIn('Login', html)
+            self.assertNotIn('Signup', html)
+            self.assertIn('My Interactions', html)
+            self.assertIn('Logout', html)
+            self.assertIn('Someuser', html)
+            self.assertIn('Testy McTestface', html)
+
+    def test_user(self):
+        with app.test_client() as client:
+            with client.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user.id
+
+            resp = client.get("/user", follow_redirects=True)
+            assert sess[CURR_USER_KEY] == self.user.id
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotIn('Login', html)
+            self.assertNotIn('Signup', html)
+            self.assertIn('My Interactions', html)
+            self.assertIn('Logout', html)
+            self.assertIn('Someuser', html)
+            self.assertIn('Testy McTestface', html)
+
+    def test_user_edit(self):
+        with app.test_client() as client:
+            with client.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user.id
+
+            resp = client.get("/user/edit", follow_redirects=True)
+            assert sess[CURR_USER_KEY] == self.user.id
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotIn('Login', html)
+            self.assertNotIn('Signup', html)
+            self.assertIn('My Interactions', html)
+            self.assertIn('Logout', html)
+            self.assertIn('Someuser', html)
+            self.assertIn('Editing information for', html)
+
+    def test_user_interactions(self):
+        with app.test_client() as client:
+            with client.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user.id
+
+            resp = client.get("/user/interactions", follow_redirects=True)
+            assert sess[CURR_USER_KEY] == self.user.id
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotIn('Login', html)
+            self.assertNotIn('Signup', html)
+            self.assertIn('My Interactions', html)
+            self.assertIn('Logout', html)
+            self.assertIn('Someuser', html)
+            self.assertIn('email', html)
+            self.assertIn('stuff and junk', html)
+            self.assertIn('all the things', html)

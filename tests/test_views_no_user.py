@@ -5,6 +5,8 @@
 
 # import os
 from unittest import TestCase, mock
+from unittest.mock import Mock
+
 
 from models import db
 from tests.openstate_info_mock import latLng, all_info
@@ -50,21 +52,25 @@ class ViewsTestCaseNoUser(TestCase):
             self.assertNotIn('My Interactions', html)
             self.assertNotIn('Logout', html)
 
-    #this doesn't seem to be working
-    # @mock.patch('models.Representative.find_latlng', return_value=latLng)
-    # @mock.patch('models.Representative.find_reps', return_value=all_info)
-    # def test_your_reps(self, mock_find_latlng, mock_find_reps):
-    #     with app.test_client() as client:
-    #         d = {'address': '1313 Mockingbird Ln.'}
-    #         resp = client.get("/your-reps", data= d, follow_redirects=True)
-    #         html = resp.get_data(as_text=True)
-
-    #         self.assertEqual(resp.status_code, 200)
-    #         self.assertIn('Login', html)
-    #         self.assertIn('Signup', html)
-    #         self.assertIn('Signup and keep track of your communications with your representatives.', html)
-    #         self.assertNotIn('My Interactions', html)
-    #         self.assertNotIn('Logout', html)
+    # this doesn't seem to be working
+    @mock.patch('models.Representative.find_latlng')
+    @mock.patch('models.Representative.find_reps')
+    def test_your_reps(self, mock_find_latlng, mock_find_reps):
+        get_response = Mock(return_value=Mock(status_code=200, text='{"blah": "blah"}'))
+        mock_find_latlng = Mock(return_value=Mock(status_code=200, json=latLng))
+        mock_find_reps =Mock(return_value=Mock(status_code=200, json=all_info))
+        with app.test_client() as client:
+            d = {'address': '1313 Mockingbird Ln.'}
+            resp = client.get("/your-reps", data= d, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+            # import pdb
+            # pdb.set_trace()
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Login', html)
+            self.assertIn('Signup', html)
+            self.assertIn('Signup and keep track of your communications with your representatives.', html)
+            self.assertNotIn('My Interactions', html)
+            self.assertNotIn('Logout', html)
     
     def test_user(self):
         with app.test_client() as client:
