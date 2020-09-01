@@ -19,20 +19,25 @@
           if field.widget.input_type != 'hidden' %}
           <p>
             <!-- {{ field.label }} -->
-            {{ field(placeholder=field.label.text) }}
+            {{ field(placeholder=field.label.text, class_="form-control") }}
             
             {% for error in field.errors %}
-            {{ error }}
+            <p class="text-warning">{{ error }}</p>
             {% endfor %}
           </p>
           
           {% endfor %}
           
-          <button type="submit" class="btn btn-primary">Signup</button>
+          <button type="submit" class="btn btn-info">Signup</button>
           
         </form>
       </div>
     </div>
+  </div>
+
+  <div class='bg-secondary'>
+    <a href="/user" class="btn btn-info m-4">BACK</a>
+  
   </div>
     
     

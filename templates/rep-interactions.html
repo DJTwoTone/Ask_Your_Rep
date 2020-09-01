@@ -4,6 +4,15 @@
 
 {% block content %}
 
+<div class="container">
+  <div class="d-flex justify-content-around">
+  <div class="bg-primary p-2 text-center" style="width: 45%">
+    <h1 class="display-4">Interactions with {{rep.full_name}}</h1>
+    <p class="lead m-2">Do you need to talk to you representative?</p>
+  </div>
+  </div>
+  </div>
+
 {% if not rep.interactions %}
 
   <h2>No one has interacted with this representative yet.</h2>
@@ -16,7 +25,7 @@
 
       <div class="card m-3 shadow">
         <div class="card-header">
-          Interaction with {{interaction.representative.full_name}}
+          <h3> From {{interaction.representative.full_name}} </h3>
         </div>
         <div class="card-body">
           <h5 class="card-title">{{interaction.topic}}</h5>
@@ -30,5 +39,9 @@
   </div>
 
   {% endif %}
+  <div class='bg-secondary'>
+    <a href="/user" class="btn btn-info m-4">BACK</a>
+  
+  </div>
 
   {% endblock %}

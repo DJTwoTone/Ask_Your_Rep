@@ -3,10 +3,15 @@
 {% block title %} Ask Your Rep {% endblock %}
 
 {% block content %}
-<div class="bg-info">
-<h1>Showing representatives for:</h1>
-<h3>{{user.first_name}} {{user.last_name}}</h3>
-<p>{{user.address}}</p>
+<div class="container">
+<div class="d-flex justify-content-around">
+
+  <div class="bg-primary p-2 text-center" style=width:80%>
+    <h1>Showing representatives for:</h1>
+    <h3>{{user.first_name}} {{user.last_name}}</h3>
+    <p>{{user.address}}</p>
+  </div>
+  </div>
 </div>
 
 <div class="container">
@@ -73,7 +78,7 @@
         <div class="row justify-content-between">
           <form action="/user/interactions/add" class="col-3">
             <input type="hidden" id="repId" name="repId" value={{rep.id}}>
-            <button type="submit" class="btn btn-primary">Interact with this Representative</button>
+            <button type="submit" class="btn btn-info">Interact with this Representative</button>
           </form>
           <a href="/reps/{{rep.id}}/interactions" class="btn btn-secondary float-right col-3">See this representative's interactions</a>
 
@@ -83,7 +88,7 @@
   </div>
 </div>
 <div class='bg-secondary'>
-  <a href="/user/edit" class="btn btn-primary m-4">EDIT USER INFO</a>
+  <a href="/user/edit" class="btn btn-info m-4">EDIT USER INFO</a>
 
 </div>
 

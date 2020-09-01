@@ -1,34 +1,120 @@
-body, html {
-    height: 100%;
+/* .patBg {
+  position: relative;
+  background: #ffffff;
+  overflow: hidden;
+  z-index: -2;
+  pointer-events: auto; 
+}
+
+.patBg:before {
+  content: ' ';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.2;
+  background-image: url("/static/img/dec_of_ind.jpg");
+  filter: sepia(100%);
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  -ms-background-size: cover;
+  -o-background-size: cover;
+  -moz-background-size: cover;
+  -webkit-background-size: cover;
+  background-size: cover;
+} */
+
+.content:before {
+  content: ' ';
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.2;
+  background-image: url("/static/img/dec_of_ind.jpg");
+  filter: sepia(100%);
+  pointer-events: none;
+  background-repeat: repeat;
+  background-position: 50% 0;
+  -ms-background-size: cover;
+  -o-background-size: cover;
+  -moz-background-size: cover;
+  -webkit-background-size: cover;
+  background-size: cover;
+}
+
+/* .box-img {
+  background-image: url("https://l.https://trianglify.io/p/w:1440!h:900!x:3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234!v:0.6!c:0.04!s:mknv4d!f:il!i:0.57?fbclid=IwAR0kQNlGbkOIHUahuekwzw8jKhgjIW1y_86MaFwwaL9Uprbbi-dHzN-T7EU.com/l.php?u=https%3A%2F%2Ftrianglify.io%2Fp%2Fw%3A1440!h%3A900!x%3A3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234!v%3A0.6!c%3A0.04!s%3Amknv4d!f%3Ail!i%3A0.57%3Ffbclid%3DIwAR0kQNlGbkOIHUahuekwzw8jKhgjIW1y_86MaFwwaL9Uprbbi-dHzN-T7EU&h=AT35c_F2Joym0AOb-drH24MxS_V5GYLrOyPqolNL9M4zbnWsHjWA68k-Mzr505-v0I-vvMJRNjS9sNxUti4X79mdx600RY295wFtdVZvcoaBMIR5xAraKrjKdBmeRmKRNxQ") !important;
+} */
+
+/* .in-box:after {
+  content: ' ';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.2;
+  background-image: url("https://l.https://trianglify.io/p/w:1440!h:900!x:3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234!v:0.6!c:0.04!s:mknv4d!f:il!i:0.57?fbclid=IwAR0kQNlGbkOIHUahuekwzw8jKhgjIW1y_86MaFwwaL9Uprbbi-dHzN-T7EU.com/l.php?u=https%3A%2F%2Ftrianglify.io%2Fp%2Fw%3A1440!h%3A900!x%3A3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234!v%3A0.6!c%3A0.04!s%3Amknv4d!f%3Ail!i%3A0.57%3Ffbclid%3DIwAR0kQNlGbkOIHUahuekwzw8jKhgjIW1y_86MaFwwaL9Uprbbi-dHzN-T7EU&h=AT35c_F2Joym0AOb-drH24MxS_V5GYLrOyPqolNL9M4zbnWsHjWA68k-Mzr505-v0I-vvMJRNjS9sNxUti4X79mdx600RY295wFtdVZvcoaBMIR5xAraKrjKdBmeRmKRNxQ");
+  filter: sepia(100%);
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  -ms-background-size: cover;
+  -o-background-size: cover;
+  -moz-background-size: cover;
+  -webkit-background-size: cover;
+  background-size: cover;
+} */
+/* 
+.insidePatBg {
+  position: relative;
+  z-index: 5;
+} */
+
+/* .content {
+  z-index: 99;
+} */
+/* .background {
+    height: 100%; */
 
     /* The image used */
-    background-image: url("/static/img/dec_of_ind.jpg");
-    backdrop-filter: sepia(50%);
+    /* background-image: url("/static/img/dec_of_ind.jpg");
+    opacity: 0.3; */
     
   
     /* Full height */
-    height: 100%;
+    /* height: 100%; */
   
     /* Center and scale the image nicely */
-    background-position: center;
+    /* background-position: center; */
     /* background-repeat: no-repeat; */
-    background-size: cover;
-  }
+    /* background-size: cover; */
+  /* } */
 
-.card {
-    height: 100%!important;
+/* .card { */
+    /* height: 100%!important; */
 
     /* The image used */
-    background-image: url("https://l.https://trianglify.io/p/w:1440!h:900!x:3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234!v:0.6!c:0.04!s:mknv4d!f:il!i:0.57?fbclid=IwAR0kQNlGbkOIHUahuekwzw8jKhgjIW1y_86MaFwwaL9Uprbbi-dHzN-T7EU.com/l.php?u=https%3A%2F%2Ftrianglify.io%2Fp%2Fw%3A1440!h%3A900!x%3A3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234!v%3A0.6!c%3A0.04!s%3Amknv4d!f%3Ail!i%3A0.57%3Ffbclid%3DIwAR0kQNlGbkOIHUahuekwzw8jKhgjIW1y_86MaFwwaL9Uprbbi-dHzN-T7EU&h=AT35c_F2Joym0AOb-drH24MxS_V5GYLrOyPqolNL9M4zbnWsHjWA68k-Mzr505-v0I-vvMJRNjS9sNxUti4X79mdx600RY295wFtdVZvcoaBMIR5xAraKrjKdBmeRmKRNxQ")!important;
+    /* background-image: url("https://l.https://trianglify.io/p/w:1440!h:900!x:3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234!v:0.6!c:0.04!s:mknv4d!f:il!i:0.57?fbclid=IwAR0kQNlGbkOIHUahuekwzw8jKhgjIW1y_86MaFwwaL9Uprbbi-dHzN-T7EU.com/l.php?u=https%3A%2F%2Ftrianglify.io%2Fp%2Fw%3A1440!h%3A900!x%3A3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.ffffff.3c3b6e.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234.ffffff.b22234!v%3A0.6!c%3A0.04!s%3Amknv4d!f%3Ail!i%3A0.57%3Ffbclid%3DIwAR0kQNlGbkOIHUahuekwzw8jKhgjIW1y_86MaFwwaL9Uprbbi-dHzN-T7EU&h=AT35c_F2Joym0AOb-drH24MxS_V5GYLrOyPqolNL9M4zbnWsHjWA68k-Mzr505-v0I-vvMJRNjS9sNxUti4X79mdx600RY295wFtdVZvcoaBMIR5xAraKrjKdBmeRmKRNxQ")!important; */
   
     /* Full height */
-    height: 100%!important;
+    /* height: 100%!important; */
   
     /* Center and scale the image nicely */
-    background-position: center!important;
+    /* background-position: center!important; */
     /* background-repeat: no-repeat; */
-    background-size: cover!important;
-  }
+    /* background-size: cover!important; */
+  /* } */
 
 .card-text {
     word-wrap: break-word;

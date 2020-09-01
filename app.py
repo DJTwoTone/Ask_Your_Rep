@@ -63,6 +63,10 @@ def home():
 @app.route("/your-reps")
 def your_reps():
 
+    if not request.args['search-input']:
+        flash("Please enter an address")
+        return redirect('/')
+
     address = request.args['search-input']
 
     reps = Representative.find_reps(address=address)
@@ -70,6 +74,7 @@ def your_reps():
     if not reps:
         flash("No representatives found for the address. Please recheck your address")
         flash("*NOTE: This is designed to find US state representatives only.")
+        return redirect("/")
     return render_template('reps.html', reps=reps, address=address)
 
 @app.route("/user")

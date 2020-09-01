@@ -4,9 +4,19 @@
 
 {% block content %}
 
+<div class="container">
+  <div class="d-flex justify-content-around">
+  <div class="bg-primary p-2 text-center" style="width: 45%">
+    <h1 class="display-4">Your Interactions</h1>
+    <p class="lead m-2">Think about reaching out again</p>
+  </div>
+  </div>
+  </div>
+
 <div class="container-fluid">
   <div class="row d-flex justify-content-around">
-{% for interaction in user.interactions %}
+{% if user.interactions %}
+  {% for interaction in user.interactions %}
 
     <div class="card m-3 shadow">
       <div class="card-header">
@@ -20,10 +30,20 @@
         <p class="card-text"><small class="text-muted">{{interaction.interaction_date.strftime('%m / %d / %Y')}}</small></p>
         <p class="card-text">{{interaction.content}}</p>
         <p class="card-text"><small class="text-muted">via: {{interaction.medium}}</small></p>
-        <a href="/user/interaction/{{interaction.id}}/edit" class="btn btn-primary text-wrap ">Edit This Interaction</a>
+        <a href="/user/interaction/{{interaction.id}}/edit" class="btn btn-info text-wrap ">Edit This Interaction</a>
       </div>
     </div>
     {% endfor %}
+{% else %}
+<div class="container mt-3">
+  <div class="d-flex justify-content-around">
+  <div class="bg-secondary p-2" style="width: 55%">
+    <h3 class=" text-light">You haven't registered any interactions</h1>
+    <p class="lead m-2 text-light">The future is in your hands</p>
+  </div>
+  </div>
+  </div>
+{% endif %}
   </div>
 </div>
 

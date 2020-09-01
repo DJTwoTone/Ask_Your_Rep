@@ -11,38 +11,46 @@
     {% block head_addons %} {% endblock %}
 </head>
 <body>
+  <!-- <div class="patBg"> -->
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-    <a class="navbar-brand" href="/">Ask Your Rep</a>
-    <ul class="navbar-nav ml-md-auto">
-  {% if 'curr_user' not in session %}
-            <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-            {% if address %}
-            <li class="nav-item"><a class="nav-link" href="/signup?address={{address}}">Signup</a></li>
-            {% else %}
-            <li class="nav-item"><a class="nav-link" href="/signup">Signup</a></li>
-            {% endif %}
-  {% else %}
-            <li class="nav-item"><a class="nav-link" href="/user/edit"><i class="fas fa-id-card 3x"></i>  {{user.username}}</a></li>
-            <li class="nav-item"><a class="nav-link" href="/user/interactions">My Interactions</a></li>
-            <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
-  {% endif %}
+  <!-- </div> -->
+    <!-- <div class="insidePatBg"> -->
+    
+      
+      <div class="content">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <a class="navbar-brand" href="/">Ask Your Rep</a>
+        <ul class="navbar-nav ml-md-auto">
+          {% if 'curr_user' not in session %}
+          <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+          {% if address %}
+          <li class="nav-item"><a class="nav-link" href="/signup?address={{address}}">Signup</a></li>
+          {% else %}
+          <li class="nav-item"><a class="nav-link" href="/signup">Signup</a></li>
+          {% endif %}
+          {% else %}
+          <li class="nav-item"><a class="nav-link" href="/user/edit"><i class="fas fa-id-card 3x"></i>  {{user.username}}</a></li>
+          <li class="nav-item"><a class="nav-link" href="/user/interactions">My Interactions</a></li>
+          <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+          {% endif %}
         </ul>
       </nav>
       <div class="bg-secondary">
-    {% for msg in get_flashed_messages() %}
-
-      <div class="d-flex justify-content-center">
-        <h3 class="text-light">{{msg}}</h3>
+        {% for msg in get_flashed_messages() %}
+        
+        <div class="d-flex justify-content-center">
+          <h3 class="text-light m-3">{{msg}}</h3>
+        </div>
+        {% endfor %}
       </div>
-    {% endfor %}
-  </div>
-    {% block content %}
-    {% endblock %}    
-
-
+      {% block content %}
+      {% endblock %}    
+      
+    </div>
+    </div>
+    <!-- </div> -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 <script src="https://api.mqcdn.com/sdk/place-search-js/v1.0.0/place-search.js"></script>
 <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/place-search-js/v1.0.0/place-search.css"/>

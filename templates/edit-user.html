@@ -3,10 +3,15 @@
 {% block title %} Ask Your Rep {% endblock %}
 
 {% block content %}
-<div class="bg-info">
-    <p>Editing information for {{user.username}}</p>
-</div>
 
+<div class="container">
+    <div class="d-flex justify-content-around">
+        <div class="bg-primary p-2 text-center" style="width: 65%">
+            <div class="display-3">Editing information for:</div>
+            <div class="display-4 text-center">{{user.username}}</div>
+        </div>
+    </div>
+</div>
 <div class="container">
     <div class="d-flex align-items-center justify-content-around min-vh-100">
   
@@ -20,20 +25,25 @@
     {% for field in form
         if field.widget.input_type != 'hidden' %}
         <p>
-        {{ field.lable }}
-        {{ field }}
+        {{ field.label }}
+        {{ field(class_="form-control") }}
 
         {% for error in field.errors %}
-            {{ error }}
+        <p class="text-warning">{{ error }}</p>
         {% endfor %}
     </p>
     {% endfor %}
-    <button type="submit">Change Your Info</button>
+    <button type="submit" class="btn btn-info">Change Your Info</button>
 
 </form>
 
       </div>
     </div>
 </div>
+
+<div class='bg-secondary'>
+    <a href="/user" class="btn btn-info m-4">BACK</a>
+  
+  </div>
 
 {% endblock %}

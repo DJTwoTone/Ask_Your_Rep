@@ -3,9 +3,14 @@
 {% block title %} Add an Interaction {% endblock %}
 
 {% block content %}
-<div class="bg-info">
+<div class="container">
+    <div class="d-flex justify-content-around">
+<div class="bg-primary p-2 text-center" style=width:80%>
     <h1>Add an Interaction</h1>
 </div>
+</div>
+</div>
+
 <div class="container">
     <div class="d-flex align-items-center justify-content-around min-vh-100">
 
@@ -26,15 +31,20 @@
                 </p>
                 
                 {% for error in field.errors %}
-                {{ error }}
+                <p class="text-warning">{{ error }}</p>
                 {% endfor %}
                 
                 {% endfor %}
-                <button type="submit" class="btn btn-primary">Add Interaction</button>
+                <button type="submit" class="btn btn-info">Add Interaction</button>
                 </div>
             </form>
             </div>
             </div>
         </div>
+
+        <div class='bg-secondary'>
+            <a href="/user" class="btn btn-info m-4">BACK</a>
+          
+          </div>
         
         {% endblock %}

@@ -3,15 +3,18 @@
 {% block title %} Ask Your Rep {% endblock %}
 
 {% block content %}
-
-<div class="bg-info">
+<div class="container">
+<div class="d-flex justify-content-around">
+<div class="bg-primary p-2 text-center" style="width: 45%">
   <h1 class="display-4">Login</h1>
-  <p class="lead">Welcome back! Who have you talked to recently?</p>
+  <p class="lead m-2">Welcome back! Who have you talked to recently?</p>
 </div>
-<div class="container"></div>
-<div class="d-flex align-items-center justify-content-around min-vh-100">
+</div>
+</div>
+<div class="container" >
+<div class="d-flex justify-content-around ">
 
-  <div class="m-3 shadow p-3 mb-5 bg-white rounded" style="width: 80%;">
+  <div class="m-3 shadow p-3 mb-5 bg-white rounded box-img" style="width: 35%;" >
 <form method="POST">
 
   {{ form.hidden_tag() }}
@@ -20,19 +23,24 @@
   if field.widget.input_type != 'hidden' %}
   <p>
     <!-- {{ field.label }} -->
-    {{ field(placeholder=field.label.text) }}
+    {{ field(placeholder=field.label.text, class_="form-control") }}
 
     {% for error in field.errors %}
-    {{ error }}
+      <p class="text-warning">{{ error }}</p>
     {% endfor %}
   </p>
   {% endfor %}
 
-  <button type="submit">Login</button>
+  <button type="submit" class="btn btn-info">Login</button>
 
 </form>
 </div>
 </div>
+</div>
+
+<div class='bg-secondary'>
+  <a href="/user" class="btn btn-info m-4">BACK</a>
+
 </div>
 
 {% endblock %}
