@@ -30,6 +30,8 @@ For all other information regarding state representatives, the OpenStates API wi
 
 `https://docs.openstates.org/`
 
+** Note - Because these are open and free, the number of daily users may be limited
+
 ## Future addition
 
     - add a countdown timer until elections / reelection times
