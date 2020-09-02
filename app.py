@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, redirect, request, g, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
 import requests
@@ -16,7 +17,7 @@ app.config['SQLALCHEMY_ECHO'] = True
 connect_db(app)
 # db.create_all()
 
-app.config['SECRET_KEY'] = "Give me liberty, or give me death"
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "Give me liberty, or give me death")
 # mapQKey = 'n2BFbDxJHnrRNG5um6e81nYoGcHGbBm7'
 # openStatesKey = '0c190e42-7c55-4ea7-98f4-0d9935580b33'
 
