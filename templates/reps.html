@@ -20,35 +20,35 @@
       <div class="card m-3 shadow p-3 mb-5 bg-white rounded" style="width: 75%;">
         <div class="row">
           <div class="col-2">
-            {% if not rep.photo_url %}
+            {% if not rep.image %}
             <img src="/static/img/no-image-icon.png" class="img-thumbnail rounded-circle shadow" alt="{{rep.full_name}}">
             {% else %}
-            <img src="{{rep.photo_url}}" class="img-thumbnail rounded-circle shadow" alt="{{rep.full_name}}">
+            <img src="{{rep.image}}" class="img-thumbnail rounded-circle shadow" alt="{{rep.full_name}}">
             {% endif %}
           </div>
           <div class="col-10">
             <div class="card-body">
               <div class="row d-flex justify-content-between align-items-baseline">
-                <h3 class="card-title display-4">{{rep.full_name}}</h3><p class="text-muted text-right ">{{rep.party}}</p>
+                <h3 class="card-title display-4">{{rep.name}}</h3><p class="text-muted text-right ">{{rep.party}}</p>
               </div>
               <hr/>
               <p class="h3 card-text">{{rep.state |upper}} State - {{rep.chamber |capitalize}} House - District {{rep.district}}</p>
               
             {% if rep.email %}
-              <p class="card-text">{{rep.first_name}} can be reached at <a href="mailto:{{rep.email}}"> {{rep.email}} </a></p>
+              <p class="card-text">{{rep.given_name}} can be reached at <a href="mailto:{{rep.email}}"> {{rep.email}} </a></p>
             {% else %}
-              <p class="card-text">{{rep.first_name}} doesn't seem to have a registered email address. You may want to contact them personally.</p>
+              <p class="card-text">{{rep.given_name}} doesn't seem to have a registered email address. You may want to contact them personally.</p>
             {% endif %}
               
             {% if rep.sources[0] %}
-              <p class="card-text">{{rep.first_name}}'s website(s) can be found at:
+              <p class="card-text">{{rep.given_name}}'s website(s) can be found at:
                 <ul>
                   {% for source in rep.sources %}
                     <li><a href="{{source.url}}" target="_blank">{{source.url}}</a></li>
                   {% endfor %}
                 </ul>
             {% else %}
-              <p class="card-text">{{rep.first_name}} doesn't seem to have a registered website. You may want to contact them personally.</p>
+              <p class="card-text">{{rep.given_name}} doesn't seem to have a registered website. You may want to contact them personally.</p>
             {% endif %}
             </div>
 
@@ -60,8 +60,8 @@
           {% for office in rep.offices %}
           <div class="col-{{12/rep.offices|length}} m-2">
             <p class="h4">{{office.name}}</p>
-            {% if office.phone %}
-            <p class="card-text">Phone number: <a href="tel:{{office.phone}}"> {{office.phone}}</a></p>
+            {% if office.voice %}
+            <p class="card-text">Phone number: <a href="tel:{{office.voice}}"> {{office.voice}}</a></p>
             {% else %}
             <p class="card-text">Phone number: No phone number listed for this office.</p>
             {% endif %}

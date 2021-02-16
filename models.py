@@ -9,8 +9,8 @@ import requests
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 
-mapQKey = 'n2BFbDxJHnrRNG5um6e81nYoGcHGbBm7'
-openStatesKey = '0c190e42-7c55-4ea7-98f4-0d9935580b33'
+mapQKey = "n2BFbDxJHnrRNG5um6e81nYoGcHGbBm7"
+openStatesKey = "0c190e42-7c55-4ea7-98f4-0d9935580b33"
 
 
 def connect_db(app):
@@ -20,11 +20,10 @@ def connect_db(app):
 
 class District(db.Model):
     """Districts"""
-    __tablename__ = 'districts'
 
-    id = db.Column(db.Integer, 
-                    primary_key=True,
-                    autoincrement=True)
+    __tablename__ = "districts"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     state = db.Column(db.String, nullable=False)
     district_num = db.Column(db.String, nullable=False)
     house = db.Column(db.String, nullable=False)
@@ -32,10 +31,9 @@ class District(db.Model):
     @classmethod
     def check_district(cls, state, district_num, house):
 
-        
-        dist = cls.query.filter(cls.state == state,
-                                 cls.district_num == district_num,
-                                 cls.house == house).one_or_none()
+        dist = cls.query.filter(
+            cls.state == state, cls.district_num == district_num, cls.house == house
+        ).one_or_none()
 
         return dist
 
@@ -47,16 +45,14 @@ class District(db.Model):
 
         return dist
 
-    
 
 class Office(db.Model):
     """Representatives's offices"""
-    __tablename__ = 'offices'
 
-    id = db.Column(db.Integer, 
-                    primary_key=True,
-                    autoincrement=True)
-    representative_id = db.Column(db.Integer, db.ForeignKey('representatives.id'))
+    __tablename__ = "offices"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    representative_id = db.Column(db.Integer, db.ForeignKey("representatives.id"))
 
     phone = db.Column(db.String)
     address = db.Column(db.String)
@@ -64,141 +60,159 @@ class Office(db.Model):
 
     @classmethod
     def add_office(cls, office):
-        return cls(phone=office["phone"], address=office["address"], location=office["name"])
+        return cls(
+            phone=office["phone"], address=office["address"], location=office["name"]
+        )
 
 
 class Representative(db.Model):
     """Representatives"""
-    __tablename__ = 'representatives'
 
-    id = db.Column(db.Integer,
-                    primary_key=True,
-                    autoincrement=True)
-    first_name = db.Column(db.String, nullable=False)
-    last_name = db.Column(db.String, nullable=False)
-    full_name = db.Column(db.String, nullable=False)
-    district_id = db.Column(db.Integer, db.ForeignKey('districts.id'))
-    district = db.relationship("District", backref='representatives')
-    offices = db.relationship('Office',
-                                backref='representative', cascade="all,delete")
-    photo_url = db.Column(db.String)
+    __tablename__ = "representatives"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    given_name = db.Column(db.String, nullable=False)
+    family_name = db.Column(db.String, nullable=False)
+    name = db.Column(db.String, nullable=False)
+    district_id = db.Column(db.Integer, db.ForeignKey("districts.id"))
+    district = db.relationship("District", backref="representatives")
+    offices = db.relationship("Office", backref="representative", cascade="all,delete")
+    image = db.Column(db.String)
     email = db.Column(db.String)
     serving = db.Column(db.Boolean, nullable=False)
     websites = db.Column(db.JSON)
     party = db.Column(db.String)
 
     @classmethod
-    def check_rep(cls, full_name, state, district_num, house, serving):
+    def check_rep(cls, name, state, district_num, house, serving):
 
-        reps = cls.query.filter(cls.full_name == full_name, 
-                                    cls.serving == serving).join(District).all()
+        reps = (
+            cls.query.filter(cls.name == name, cls.serving == serving)
+            .join(District)
+            .all()
+        )
 
         for rep in reps:
-            if rep.district.state == state and rep.district.district_num == district_num and rep.district.house == house:
+            if (
+                rep.district.state == state
+                and rep.district.district_num == district_num
+                and rep.district.house == house
+            ):
                 return rep
-        
+
         return []
-    
+
     def find_latlng(address):
-        geodata = requests.get('http://www.mapquestapi.com/geocoding/v1/address', 
-                            params={
-                                'key': mapQKey,
-                                'location': address
-                                    })
+        geodata = requests.get(
+            "http://www.mapquestapi.com/geocoding/v1/address",
+            params={"key": mapQKey, "location": address},
+        )
 
         jdata = geodata.json()
-        latLng = jdata['results'][0]['locations'][0]['latLng']
+        latLng = jdata["results"][0]["locations"][0]["latLng"]
         return latLng
-        
+
     def find_reps(address):
 
         latLng = Representative.find_latlng(address)
-        lat = latLng['lat']
-        lng = latLng['lng']
 
-        repsResp = requests.get('http://www.openstates.org/api/v1/legislators/geo',
-                        params={
-                            'apikey': openStatesKey,
-                            'lat': lat,
-                            'long': lng
-                        })
-        return repsResp.json()
+        lat = latLng["lat"]
+        lng = latLng["lng"]
 
-    #this needs to be broken down some
+        # repsResp = requests.get('http://www.openstates.org/api/v1/legislators/geo',
+        repsResp = requests.get(
+            "https://v3.openstates.org/people.geo",
+            params={
+                "apikey": openStatesKey,
+                "lat": lat,
+                "lng": lng,
+                "include": ["links", "sources", "offices"],
+            },
+        )
+
+        resp_data = repsResp.json()
+        return resp_data["results"]
+
+    # this needs to be broken down some
     @classmethod
     def add_rep(cls, rep):
-            full_name = rep.get('full_name')
-            first_name=rep.get('first_name')
-            last_name=rep.get('last_name')
-            # full_name=rep.get('full_name')
-            photo_url=rep.get('photo_url')
-            email=rep.get('email')
-            serving=rep.get('active')
-            state = rep.get('state')
-            district_num = str(rep.get('district'))
-            house = rep.get('chamber')
-            sources = rep.get('sources')
-            if sources == []:
-                websites = 'None'
+
+        name = rep.get("name")
+        given_name = rep.get("given_name")
+        family_name = rep.get("family_name")
+        # full_name=rep.get('full_name')
+        image = rep.get("image")
+        email = rep.get("email")
+        serving = rep.get("active")
+        state = rep.get("state")
+        district_num = str(rep.get("district"))
+        house = rep.get("chamber")
+        sources = rep.get("sources")
+        if sources == []:
+            websites = "None"
+        else:
+            websites = sources
+        party = rep.get("party")
+        offices = rep.get("offices")
+
+        if not Representative.check_rep(name, state, district_num, house, serving):
+
+            if not District.check_district(
+                state=state, district_num=district_num, house=house
+            ):
+                dist = District.add_district(
+                    state=state, district_num=district_num, house=house
+                )
+
             else:
-                websites = sources
-            party = rep.get('party')
-            offices = rep.get('offices')
+                dist = District.check_district(
+                    state=state, district_num=district_num, house=house
+                )
 
-            if not Representative.check_rep(full_name, state, district_num, house, serving):
-                
-                if not District.check_district(state=state, district_num=district_num, house=house):
-                    dist = District.add_district(state=state, district_num=district_num, house=house)
+            r = cls(
+                given_name=given_name,
+                family_name=family_name,
+                full_name=name,
+                district=dist,
+                image=image,
+                email=email,
+                serving=serving,
+                websites=websites,
+                party=party,
+            )
 
-                else:
-                    dist = District.check_district(state=state, district_num=district_num, house=house)
-                
-                r = cls(first_name=first_name,
-                                    last_name=last_name,
-                                    full_name=full_name,
-                                    district=dist,
-                                    photo_url=photo_url,
-                                    email=email,
-                                    serving=serving,
-                                    websites=websites,
-                                    party=party
-                                    )
-      
-                db.session.add(r)
+            db.session.add(r)
+            db.session.commit()
+
+            for office in offices:
+
+                o = Office.add_office(office)
+
+                r.offices.append(o)
                 db.session.commit()
 
-                for office in offices:
+            return r
 
-                    o = Office.add_office(office)
+        else:
 
-                    r.offices.append(o)
-                    db.session.commit()
+            return Representative.check_rep(name, state, district_num, house, serving)
 
-                return r
-
-            else:
-
-                return Representative.check_rep(full_name, state, district_num, house, serving)
-                
 
 class User(db.Model):
     """Users"""
-    __tablename__ = 'users'
 
-    id = db.Column(db.Integer, 
-                    primary_key=True,
-                    autoincrement=True)
-    username = db.Column(db.String, 
-                        nullable=False,
-                        unique=True)
+    __tablename__ = "users"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
     address = db.Column(db.String, nullable=False)
-    representatives = db.relationship('Representative',
-                                    secondary='users_representatives')
-
+    representatives = db.relationship(
+        "Representative", secondary="users_representatives"
+    )
 
     @classmethod
     def register(cls, username, password, first_name, last_name, email, address):
@@ -208,9 +222,14 @@ class User(db.Model):
 
         hashed_utf8 = hashed.decode("utf8")
 
-        user = cls(username=username, password=hashed_utf8, first_name=first_name,
-                    last_name=last_name, email=email,
-                    address=address)
+        user = cls(
+            username=username,
+            password=hashed_utf8,
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            address=address,
+        )
         db.session.add(user)
         db.session.commit()
 
@@ -228,7 +247,7 @@ class User(db.Model):
             return False
 
     def edit_user(self, first_name, last_name, email, address):
-        
+
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
@@ -241,48 +260,56 @@ class User(db.Model):
 
         db.session.commit()
 
+
 class Interaction(db.Model):
     """interactions between user and reps"""
-    __tablename__ = 'interactions'
 
-    id = db.Column(db.Integer, 
-                    primary_key=True,
-                    autoincrement=True)
-    entered_date = db.Column(db.DateTime,
-                            nullable=False,
-                            default=datetime.utcnow())
+    __tablename__ = "interactions"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    entered_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     interaction_date = db.Column(db.DateTime, nullable=False)
     medium = db.Column(db.String, nullable=False)
     topic = db.Column(db.String, nullable=False)
     content = db.Column(db.String, nullable=False)
-    
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user = db.relationship('User',
-                            # secondary='ints_users_reps_dists',
-                            backref='interactions')
-    
-    rep_id = db.Column(db.Integer, db.ForeignKey('representatives.id'))
-    representative = db.relationship('Representative',
-                            # secondary='ints_users_reps_dists',
-                            backref='interactions')
-    
-    district_id = db.Column(db.Integer, db.ForeignKey('districts.id'))
-    district = db.relationship('District',
-                            # secondary='ints_users_reps_dists',
-                            backref='interactions')
+
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    user = db.relationship(
+        "User",
+        # secondary='ints_users_reps_dists',
+        backref="interactions",
+    )
+
+    rep_id = db.Column(db.Integer, db.ForeignKey("representatives.id"))
+    representative = db.relationship(
+        "Representative",
+        # secondary='ints_users_reps_dists',
+        backref="interactions",
+    )
+
+    district_id = db.Column(db.Integer, db.ForeignKey("districts.id"))
+    district = db.relationship(
+        "District",
+        # secondary='ints_users_reps_dists',
+        backref="interactions",
+    )
 
     @classmethod
-    def add_intertaction(cls, user, representative, district, interaction_date, medium, topic, content):
-        interaction = cls(user=user, 
-                            representative=representative, 
-                            district=district, 
-                            interaction_date=interaction_date, 
-                            medium=medium, 
-                            topic=topic, 
-                            content=content)
+    def add_intertaction(
+        cls, user, representative, district, interaction_date, medium, topic, content
+    ):
+        interaction = cls(
+            user=user,
+            representative=representative,
+            district=district,
+            interaction_date=interaction_date,
+            medium=medium,
+            topic=topic,
+            content=content,
+        )
         db.session.add(interaction)
         db.session.commit()
-    
+
     def edit_interaction(self, interaction_date, medium, topic, content):
         self.interaction_date = interaction_date
         self.medium = medium
@@ -292,16 +319,11 @@ class Interaction(db.Model):
         db.session.commit()
 
 
-
 class UserRepresentative(db.Model):
     """Mapping users to representatives"""
-    __tablename__ = 'users_representatives'
 
-    id = db.Column(db.Integer,
-                    primary_key=True,
-                    autoincrement=True)
-    user_id = db.Column(db.Integer,
-                        db.ForeignKey('users.id'))
-    representive_id = db.Column(db.Integer,
-                                db.ForeignKey('representatives.id'))
+    __tablename__ = "users_representatives"
 
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    representive_id = db.Column(db.Integer, db.ForeignKey("representatives.id"))
